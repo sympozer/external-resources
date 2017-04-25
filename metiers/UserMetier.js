@@ -5,6 +5,7 @@ const fs = require('fs');
 const UserDao = require('../dao/UsersDao');
 const validator = require('validator');
 const sha1 = require('sha1');
+const Bcrypt = require('../tools/Bcrypt');
 
 class UserMetier {
   constructor() {
@@ -59,25 +60,24 @@ class UserMetier {
         return reject('Erreur lors de la récupération de l\'url de votre photo');
       }
 
-      if(!validator.isURL(avatar)){
+      if (!validator.isURL(avatar)) {
         return reject('L\'url de votre photo n\'est pas au bon format');
       }
 
       //Get user
       this.userDao.getById(id)
         .then((user) => {
-            //Set new informations
-            user.avatar = avatar;
-            console.log(user);
+          //Set new informations
+          user.avatar = avatar;
 
-            //Update user
-            this.userDao.updateAvatar(id, user)
-              .then((userUpdated) => {
-                return resolve(userUpdated);
-              })
-              .catch((error) => {
-                return reject(error);
-              });
+          //Update user
+          this.userDao.updateAvatar(id, user)
+            .then((userUpdated) => {
+              return resolve(userUpdated);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         })
         .catch((error) => {
           return reject(error);
@@ -256,9 +256,21 @@ class UserMetier {
       }
 
       //Get user
-      this.userDao.getByEmailAndPassword(email, password)
+      this.userDao.getByEmail(email)
         .then((user) => {
-          return resolve(user);
+          if (!user) {
+            return reject('Erreur lors de la récupération de votre compte');
+          }
+
+          //Check hash password
+          const bcrypt = new Bcrypt();
+          bcrypt.compare(password, user.password)
+            .then(() => {
+              return resolve(user);
+            })
+            .catch(() => {
+              return reject('Votre mot de passe ne correspond pas');
+            });
         })
         .catch((error) => {
           return reject(error);
@@ -306,10 +318,29 @@ class UserMetier {
         return reject('Erreur lors du cryptage de votre email');
       }
 
-      //Create account
-      this.userDao.add(email, email_sha1, password)
+      //Check if an account have the same email(already exist)
+      this.userDao.getByEmail(email)
         .then((user) => {
-          return resolve(user);
+          if (user) {
+            return reject('Un compte existe déjà avec cet email');
+          }
+
+          //Hash password
+          const bcrypt = new Bcrypt();
+          bcrypt.crypt(password)
+            .then((hash) => {
+              //Create account
+              this.userDao.add(email, email_sha1, hash)
+                .then((user) => {
+                  return resolve(user);
+                })
+                .catch((error) => {
+                  return reject(error);
+                });
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         })
         .catch((error) => {
           return reject(error);
