@@ -7,13 +7,18 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var cors = require('cors');
+const AdminsMetier = require('./metiers/AdminsMetier');
 
 var index = require('./routes/index');
 var profile = require('./routes/profil');
+var admin = require('./routes/admin');
+
 var mongoose   = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/server_sympozer'); // connect to our database
 
+//Check if we have a default admin account
+new AdminsMetier().setDefaultAdminAccount();
 
 var app = express();
 
@@ -59,6 +64,7 @@ app.use(cors());
 
 app.use('/', index);
 app.use('/profile', profile);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
