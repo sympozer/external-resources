@@ -17,7 +17,8 @@ router.post('/', function(req, res, next) {
   adminMetier.get(email, password)
     .then(function(user) {
       req.session.user_id = user._id;
-      return res.redirect("/admin");
+      req.session.is_admin = true;
+      return res.redirect("/admin/dashboard");
     })
     .catch(function(error) {
       SessionMetier.destroy(req.session)
@@ -28,6 +29,10 @@ router.post('/', function(req, res, next) {
           return res.redirect("/");
         });
     });
+});
+
+router.get('/dashboard', function(req, res, next){
+  return res.render('admin_dashboard');
 });
 
 module.exports = router;

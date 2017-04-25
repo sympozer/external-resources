@@ -1,26 +1,27 @@
-var express = require('express');
-var path = require('path');
+const express = require('express');
+const path = require('path');
 const fs = require('fs');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var cors = require('cors');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const cors = require('cors');
 const AdminsMetier = require('./metiers/AdminsMetier');
+const SessionMetier = require('./metiers/SessionMetier');
 
-var index = require('./routes/index');
-var profile = require('./routes/profil');
-var admin = require('./routes/admin');
+const index = require('./routes/index');
+const profile = require('./routes/profil');
+const admin = require('./routes/admin');
 
-var mongoose   = require('mongoose');
+const mongoose   = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/server_sympozer'); // connect to our database
 
 //Check if we have a default admin account
 new AdminsMetier().setDefaultAdminAccount();
 
-var app = express();
+const app = express();
 
 /* Check if upload folder exist */
 try {
@@ -34,16 +35,40 @@ app.use(session({secret: 'ssshhhhh', resave: true, saveUninitialized: true}));
 
 //Middleware session
 app.use(function(req,res,next){
-  res.locals.user_id = req.session.user_id;
+  res.locals.session = req.session;
   return next();
 });
 
 /* Middleware to check if user can access to profile page */
 app.all('(/profile/*)|(/profile)', function(req,res,next){
-  if(!req.session.user_id){
-    return res.redirect('/');
+  if(!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== false){
+    SessionMetier.destroy(req.session)
+      .then(function(){
+        return res.redirect("/");
+      })
+      .catch(function(){
+        return res.redirect("/");
+      });
   }
-  return next();
+  else {
+    return next();
+  }
+});
+
+/* Middleware to check if user can access to admin page */
+app.all('(/admin/*)|(/admin)', function(req,res,next){
+  if(!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== true){
+    SessionMetier.destroy(req.session)
+      .then(function(){
+        return res.redirect("/");
+      })
+      .catch(function(){
+        return res.redirect("/");
+      });
+  }
+  else{
+    return next();
+  }
 });
 
 
@@ -68,7 +93,7 @@ app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
