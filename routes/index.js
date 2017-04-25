@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const UserMetier = require('../metiers/UserMetier');
+const AdminsMetier = require('../metiers/AdminsMetier');
 const SessionMetier = require('../metiers/SessionMetier');
 
 /* Home page. */
@@ -21,12 +22,22 @@ router.post('/', function(req, res, next) {
       return res.redirect("/profile");
     })
     .catch(function(error) {
-      SessionMetier.destroy(req.session)
-        .then(function(){
-          return res.render("index", {error: error});
+      //Check if it's an admin account
+      const adminsMetier = new AdminsMetier();
+      adminsMetier.get(email, password)
+        .then((admin) => {
+          req.session.user_id = admin._id;
+          req.session.is_admin = true;
+          return res.redirect("/admin/dashboard");
         })
-        .catch(function(){
-          return res.redirect("/");
+        .catch((error) => {
+          SessionMetier.destroy(req.session)
+            .then(function(){
+              return res.render("index", {error: error});
+            })
+            .catch(function(){
+              return res.redirect("/");
+            });
         });
     });
 });
