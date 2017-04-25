@@ -6,6 +6,7 @@ const UserDao = require('../dao/UsersDao');
 const validator = require('validator');
 const sha1 = require('sha1');
 const Bcrypt = require('../tools/Bcrypt');
+const uuidV1 = require('uuid/v1');
 
 class UserMetier {
   constructor() {
@@ -286,6 +287,50 @@ class UserMetier {
     });
   }
 
+  addByAdmin(id_ressource) {
+    return new Promise((resolve, reject) => {
+      if (!id_ressource || id_ressource.length === 0) {
+        return reject('Erreur lors de la récupération de l\'id de la ressource');
+      }
+
+      this.userDao.getByIdRessource(id_ressource)
+        .then((user) => {
+          if (user) {
+            return reject('Une ressource existe déjà avec cet id');
+          }
+
+          const email = uuidV1() + "@gmail.com";
+          const password = uuidV1();
+
+          this.add(email, password, password)
+            .then((user) => {
+              if (!user) {
+                return reject('Erreur lors de la création de la ressource');
+              }
+
+              this.userDao.setIdRessource(user._id, id_ressource)
+                .then((userUpdated) => {
+                  if (!userUpdated) {
+                    return reject('Le compte a bien été créé mais l\'id de la ressource n\'a pas pu être enregistré');
+                  }
+
+                  user.id_ressource = id_ressource;
+                  return resolve(user);
+                })
+                .catch((error) => {
+                  return reject(error);
+                });
+            })
+            .catch((error) => {
+              return reject(error);
+            });
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
   /**
    * Add user account
    * @param email - user email
@@ -380,14 +425,12 @@ class UserMetier {
         .then((user) => {
 
           if (!user) {
-            return reject('Erreur lors de la récupération de votre compte');
-          }
+            this.userDao.getByIdRessource(id_ressource)
+              .then((user) => {
+                if (!user) {
+                  return reject();
+                }
 
-          if(id_ressource && id_ressource.length > 0){
-            //We have an user account, we set the id ressource associate
-            this.userDao.setIdRessource(user._id, id_ressource)
-              .then(() => {
-                user.id_ressource = id_ressource;
                 return resolve(user);
               })
               .catch((error) => {
@@ -395,7 +438,74 @@ class UserMetier {
               });
           }
           else {
-            return resolve(user);
+            if (id_ressource && id_ressource.length > 0 && !user.id_ressource) {
+              //Check if we have a account create by an admin with this id ressource
+              this.userDao.getByIdRessource(id_ressource)
+                .then((userCreatedByAdmin) => {
+                  if (userCreatedByAdmin) {
+                    //We have an account created by an admin, we merge informations
+                    if (!user.firstname) {
+                      user.firstname = userCreatedByAdmin.firstname;
+                    }
+                    if (!user.lastname) {
+                      user.lastname = userCreatedByAdmin.lastname;
+                    }
+                    if (!user.avatar) {
+                      user.avatar = userCreatedByAdmin.avatar;
+                    }
+                    if (!user.twitterpage) {
+                      user.twitterpage = userCreatedByAdmin.twitterpage;
+                    }
+                    if (!user.facebookpage) {
+                      user.facebookpage = userCreatedByAdmin.facebookpage;
+                    }
+                    if (!user.googleaccount) {
+                      user.googleaccount = userCreatedByAdmin.googleaccount;
+                    }
+                    if (!user.linkedinaccount) {
+                      user.linkedinaccount = userCreatedByAdmin.linkedinaccount;
+                    }
+                    if (!user.homepage) {
+                      user.homepage = userCreatedByAdmin.homepage;
+                    }
+
+                    user.id_ressource = id_ressource;
+
+                    //We save user
+                    this.userDao.mergeInformations(user._id, user)
+                      .then(() => {
+                        //We remove the user account created by admin
+                        this.userDao.remove(userCreatedByAdmin._id)
+                          .then(() => {
+                            return resolve(user);
+                          })
+                          .catch((error) => {
+                            return reject(error);
+                          });
+                      })
+                      .catch((error) => {
+                        return reject(error);
+                      });
+                  }
+                  else {
+                    //We don't have an account create by an admin, so we set the id ressource to the user account
+                    this.userDao.setIdRessource(user._id, id_ressource)
+                      .then(() => {
+                        user.id_ressource = id_ressource;
+                        return resolve(user);
+                      })
+                      .catch((error) => {
+                        return reject(error);
+                      });
+                  }
+                })
+                .catch((error) => {
+                  return reject(error);
+                });
+            }
+            else {
+              return resolve(user);
+            }
           }
         })
         .catch((error) => {

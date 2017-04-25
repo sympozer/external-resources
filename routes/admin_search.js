@@ -12,7 +12,7 @@ router.post('/person', function (req, res, next) {
       return res.render('manage_profil_user', {user: user});
     })
     .catch((error) => {
-      return res.redirect('/admin');
+      return res.redirect('/admin/dashboard');
     });
 });
 

@@ -56,4 +56,17 @@ router.post('/manage/user/avatar/change', function(req, res, next){
     });
 });
 
+router.post('/create/person', function(req, res, next){
+  const person_id_ressource = req.body.person_id_ressource;
+
+  const userMetier = new UserMetier();
+  userMetier.addByAdmin(person_id_ressource)
+    .then(function (user) {
+      return res.render('manage_profil_user', {user: user});
+    })
+    .catch(function (error) {
+      return res.render('admin_dashboard', {error: error});
+    });
+});
+
 module.exports = router;

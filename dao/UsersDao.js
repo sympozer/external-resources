@@ -245,6 +245,43 @@ class UsersDao {
       });
     });
   }
+
+  mergeInformations(id, user){
+    return new Promise((resolve, reject) => {
+      Users.update({_id: id}, {
+        $set: {
+          firstname: user.firstname,
+          lastname: user.lastname,
+          avatar: user.avatar,
+          twitterpage: user.twitterpage,
+          facebookpage: user.facebookpage,
+          googleaccount: user.googleaccount,
+          linkedinaccount: user.linkedinaccount,
+          homepage: user.homepage,
+          id_ressource: user.id_ressource,
+        }
+      }, (err, userUpdated) => {
+        if (err) {
+          return reject('Erreur lors de la modification de vos informations');
+        }
+
+        return resolve(userUpdated);
+      });
+    });
+  }
+
+  remove(id){
+    return new Promise((resolve, reject) => {
+      Users.findOne({_id: id}, function (error, person){
+        if(error){
+          return reject('Erreur lors de la suppression du compte');
+        }
+
+        person.remove();
+        return resolve();
+      });
+    });
+  }
 }
 
 module.exports = UsersDao;
