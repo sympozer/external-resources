@@ -114,13 +114,21 @@ class UserMetier {
         return reject('Vos mot de passe doivent être identiques');
       }
 
-      //Update user password
-      this.userDao.updatePassword(id, password)
-        .then((userUpdated) => {
-          return resolve(userUpdated);
+      //Hash password
+      const bcrypt = new Bcrypt();
+      bcrypt.crypt(password)
+        .then((hash) => {
+          //Update user password
+          this.userDao.updatePassword(id, hash)
+            .then((userUpdated) => {
+              return resolve(userUpdated);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         })
-        .catch((error) => {
-          return reject(error);
+        .catch(() => {
+          return reject('Erreur lors de la sécurisation de votre mot de passe');
         });
     });
   }
