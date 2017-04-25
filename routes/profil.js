@@ -1,24 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const UserMetier = require('../metiers/UserMetier');
-const multer = require('multer');
-const path = require('path');
-const crypto = require("crypto");
-
-const storage = multer.diskStorage({
-  destination: './public/uploads/',
-  filename: function (req, file, cb) {
-    crypto.pseudoRandomBytes(16, function (err, raw) {
-      if (err) return cb(err);
-
-      if (!file.originalname || file.originalname.length === 0) return cb('Erreur lors de la récupération du fichier');
-
-      cb(null, raw.toString('hex') + path.extname(file.originalname))
-    });
-  }
-});
-
-const upload = multer({storage: storage});
 
 /* Page profile */
 router.get('/', function (req, res, next) {

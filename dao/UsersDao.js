@@ -215,6 +215,20 @@ class UsersDao {
       });
     });
   }
+
+  getByIdRessource(id_ressource){
+    return new Promise((resolve, reject) => {
+      Users.findOne({
+        id_ressource: id_ressource
+      }, (err, user) => {
+        if (err) {
+          return reject('Erreur lors de la récupération de votre compte');
+        }
+
+        return resolve(user);
+      });
+    });
+  }
 }
 
 module.exports = UsersDao;

@@ -7,4 +7,8 @@ router.get('/dashboard', function(req, res, next){
   return res.render('admin_dashboard');
 });
 
+router.post('/manage/profil/user', function(req, res, next){
+  return next();
+});
+
 module.exports = router;

@@ -1,20 +1,15 @@
 {% extends 'layout.twig' %}
 
 {% block body %}
-    <h1>Log in</h1>
+    <h1>Search ressource</h1>
     {% if error %}
         <div class="alert alert-danger">{{ error }}</div>
     {% endif %}
-    <form method="POST" action="/">
+    <form method="POST" action="/admin/search/person">
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email" name="email">
+            <label for="person-id-ressource">Person id ressource</label>
+            <input type="text" class="form-control" id="person-id-ressource" placeholder="Person id ressource" name="person_id_ressource">
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
-                   name="password">
-        </div>
-        <button type="submit" class="btn btn-success">Log in</button>
+        <button type="submit" class="btn btn-success">Search</button>
     </form>
 {% endblock %}

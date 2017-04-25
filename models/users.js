@@ -53,6 +53,10 @@ const UsersSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  id_ressource: {
+    type: String,
+    required: false,
+  },
 }, { minimize: false });
 
 

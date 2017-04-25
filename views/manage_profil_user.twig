@@ -1,0 +1,123 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+    <div>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
+            </li>
+            <li role="presentation">
+                <a href="#photo" aria-controls="photo" role="tab" data-toggle="tab">Photo</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="profile">
+                <form method="POST" action="/admin/manage/profil/user">
+                    <div class="form-group">
+                        <label for="name">Lastname</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="name"
+                                placeholder="Lastname"
+                                name="lastname"
+                                value="{{ user.lastname }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="firstname">Firstname</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="firstname"
+                                placeholder="Firstname"
+                                name="firstname"
+                                value="{{ user.firstname }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="homepage">Homepage</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="homepage"
+                                placeholder="Homepage"
+                                name="homepage"
+                                value="{{ user.homepage }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="twitterpage">Twitter account</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="twitterpage"
+                                placeholder="Twitter account"
+                                name="twitterpage"
+                                value="{{ user.twitterpage }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="facebookpage">Facebook account</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="facebookpage"
+                                placeholder="Facebook account"
+                                name="facebookpage"
+                                value="{{ user.facebookpage }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="googleaccount">Google account</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="googleaccount"
+                                placeholder="Google account"
+                                name="googleaccount"
+                                value="{{ user.googleaccount }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="linkedinaccount">Linkedin account</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="linkedinaccount"
+                                placeholder="Linkedin account"
+                                name="linkedinaccount"
+                                value="{{ user.linkedinaccount }}"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-success">Update informations</button>
+                </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="photo">
+                <form method="POST" action="/profile/avatar">
+                    {% if user.avatar %}
+                        <img src="{{ user.avatar }}" for="avatar"/>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="url_photo">Photo url</label>
+                        <input type="text" class="form-control" id="url_photo"
+                               placeholder="Photo url"
+                               name="url_photo"
+                               value="{{ user.avatar }}"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-success">Change my photo</button>
+                </form>
+                <a href="/profile/avatar/remove" role="button" class="btn btn-danger">Remove my photo</a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
