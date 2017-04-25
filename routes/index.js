@@ -78,9 +78,10 @@ router.post('/register', function(req, res, next){
 /* Get user by mail box sha1 */
 router.get('/user/sha1', function(req, res, next){
   const email_sha1 = req.query.email_sha1;
+  const id_ressource = req.query.id_ressource;
 
   const userMetier = new UserMetier();
-  userMetier.getByEmailSha1(email_sha1)
+  userMetier.getByEmailSha1(email_sha1, id_ressource)
     .then(function(user){
       return res.json(user);
     })

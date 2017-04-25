@@ -229,6 +229,22 @@ class UsersDao {
       });
     });
   }
+
+  setIdRessource(id, id_ressource){
+    return new Promise((resolve, reject) => {
+      Users.update({_id: id}, {
+        $set: {
+          id_ressource: id_ressource,
+        }
+      }, (err, userUpdated) => {
+        if (err) {
+          return reject('Erreur lors de la modification de vos informations');
+        }
+
+        return resolve(userUpdated);
+      });
+    });
+  }
 }
 
 module.exports = UsersDao;

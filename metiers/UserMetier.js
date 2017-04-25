@@ -361,7 +361,7 @@ class UserMetier {
    * @param email_sha1 - sha1 email
    * @returns {Promise}
    */
-  getByEmailSha1(email_sha1) {
+  getByEmailSha1(email_sha1, id_ressource) {
     return new Promise((resolve, reject) => {
       //Check sha1 email
       if (!email_sha1 || email_sha1.length === 0) {
@@ -378,10 +378,25 @@ class UserMetier {
       //Get user
       this.userDao.getByEmailSha1(email_sha1)
         .then((user) => {
+
           if (!user) {
             return reject('Erreur lors de la récupération de votre compte');
           }
-          return resolve(user);
+
+          if(id_ressource && id_ressource.length > 0){
+            //We have an user account, we set the id ressource associate
+            this.userDao.setIdRessource(user._id, id_ressource)
+              .then(() => {
+                user.id_ressource = id_ressource;
+                return resolve(user);
+              })
+              .catch((error) => {
+                return reject(error);
+              });
+          }
+          else {
+            return resolve(user);
+          }
         })
         .catch((error) => {
           return reject(error);
