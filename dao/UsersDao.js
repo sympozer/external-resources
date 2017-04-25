@@ -19,9 +19,9 @@ class UsersDao {
    */
   removeAvatar(id) {
     return new Promise((resolve, reject) => {
-      Users.update({_id: id}, {$unset: {avatar: 1, avatar_view: 1}}, (err, userUpdated) => {
+      Users.update({_id: id}, {$unset: {avatar: 1}}, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la suppression de votre avatar');
+          return reject('Erreur lors de la suppression de votre photo');
         }
 
         return resolve(userUpdated);
@@ -41,11 +41,10 @@ class UsersDao {
       Users.update({_id: id}, {
         $set: {
           avatar: user.avatar,
-          avatar_view: user.avatar_view,
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de votre avatar');
+          return reject('Erreur lors de la modification de votre photo');
         }
 
         return resolve(userUpdated);

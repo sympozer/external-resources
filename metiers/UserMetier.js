@@ -25,16 +25,7 @@ class UserMetier {
 
       //Get user
       this.getById(id)
-        .then((user) => {
-          //If user has a avatar, we remove it
-          if (user.avatar) {
-            try {
-              fs.unlinkSync(user.avatar);
-            }
-            catch (e) {
-            }
-          }
-
+        .then(() => {
           //Remove avatar from dbb
           this.userDao.removeAvatar(id)
             .then((userUpdated) => {
@@ -65,34 +56,19 @@ class UserMetier {
 
       //Check path avatar
       if (!avatar || avatar.length === 0) {
-        return reject('Erreur lors de la récupération de votre avatar');
+        return reject('Erreur lors de la récupération de l\'url de votre photo');
+      }
+
+      if(!validator.isURL(avatar)){
+        return reject('L\'url de votre photo n\'est pas au bon format');
       }
 
       //Get user
       this.userDao.getById(id)
         .then((user) => {
-          //If the user have an avatar, we delete it
-          if (user.avatar) {
-            try {
-              fs.unlinkSync(user.avatar);
-            }
-            catch (e) {
-            }
-          }
-
-          //Create path where the view ask
-          const tab = avatar.split('/');
-          if (tab.length > 0) {
-            tab.splice(0, 1);
-            const avatar_view = tab.join('/');
-
-            if (avatar_view.length === 0) {
-              return reject('Erreur lors de l\'extraction de l\'avatar');
-            }
-
             //Set new informations
             user.avatar = avatar;
-            user.avatar_view = avatar_view;
+            console.log(user);
 
             //Update user
             this.userDao.updateAvatar(id, user)
@@ -102,10 +78,6 @@ class UserMetier {
               .catch((error) => {
                 return reject(error);
               });
-          }
-          else {
-            return reject('Erreur lors de l\'extraction de l\'avatar');
-          }
         })
         .catch((error) => {
           return reject(error);

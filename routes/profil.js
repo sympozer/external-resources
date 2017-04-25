@@ -93,23 +93,19 @@ router.get('/avatar', function (req, res, next) {
 });
 
 /* Upload user avatar */
-router.post('/avatar', upload.single('avatar'), function (req, res, next) {
+router.post('/avatar', function (req, res, next) {
   const idUser = req.session.user_id;
 
-  if (!req.file) {
-    return res.redirect('/profile/avatar');
-  }
-
-  const avatar = req.file.path;
-
+  const avatar = req.body.url_photo;
+console.log(avatar);
   const userMetier = new UserMetier();
   userMetier.updateAvatar(idUser, avatar)
     .then(function (userUpdated) {
-      return res.redirect('/profile/avatar');
+      return res.redirect('/profile');
     })
     .catch(function (error) {
       console.log(error);
-      return res.redirect('/profile/avatar');
+      return res.redirect('/profile');
     });
 });
 
@@ -120,10 +116,10 @@ router.get('/avatar/remove', function (req, res, next) {
   const userMetier = new UserMetier();
   userMetier.removeAvatar(idUser)
     .then(function () {
-      res.redirect('/profile/avatar');
+      res.redirect('/profile');
     })
     .catch(function () {
-      res.redirect('/profile/avatar');
+      res.redirect('/profile');
     });
 });
 
