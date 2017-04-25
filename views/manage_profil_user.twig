@@ -20,6 +20,7 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="profile">
                 <form method="POST" action="/admin/manage/profil/user">
+                    <input type="text" class="hidden" value="{{ user._id }}" name="user_id"/>
                     <div class="form-group">
                         <label for="name">Lastname</label>
                         <input
@@ -101,7 +102,8 @@
                 </form>
             </div>
             <div role="tabpanel" class="tab-pane" id="photo">
-                <form method="POST" action="/profile/avatar">
+                <form method="POST" action="/admin/manage/user/avatar/change">
+                    <input type="text" class="hidden" value="{{ user._id }}" name="user_id"/>
                     {% if user.avatar %}
                         <img src="{{ user.avatar }}" for="avatar"/>
                     {% endif %}
@@ -115,7 +117,7 @@
                     </div>
                     <button type="submit" class="btn btn-success">Change my photo</button>
                 </form>
-                <a href="/profile/avatar/remove" role="button" class="btn btn-danger">Remove my photo</a>
+                <a href="/admin/manage/user/{{ user._id }}/avatar/remove" role="button" class="btn btn-danger">Remove my photo</a>
             </div>
         </div>
 

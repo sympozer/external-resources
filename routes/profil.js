@@ -79,14 +79,13 @@ router.post('/avatar', function (req, res, next) {
   const idUser = req.session.user_id;
 
   const avatar = req.body.url_photo;
-console.log(avatar);
+
   const userMetier = new UserMetier();
   userMetier.updateAvatar(idUser, avatar)
     .then(function (userUpdated) {
       return res.redirect('/profile');
     })
     .catch(function (error) {
-      console.log(error);
       return res.redirect('/profile');
     });
 });
