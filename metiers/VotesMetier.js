@@ -16,7 +16,7 @@ class VotesMetier {
 
       this.votesDao.userAlreadyVoted(id_user)
         .then((alreadyVoted) => {
-          return reject(alreadyVoted);
+          return resolve(alreadyVoted);
         })
         .catch((error) => {
           return reject(error);

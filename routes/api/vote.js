@@ -12,7 +12,7 @@ router.get('/', function(req, res, next){
 
   const id_user = JwtMetier.decodeToken(token);
   if(!id_user){
-    return res.json({
+    return res.json(404, {
       error: "Erreur lors de la récupération de votre identifiant",
     });
   }
@@ -24,13 +24,13 @@ router.get('/', function(req, res, next){
         return res.sendStatus(200);
       }
       else{
-        return res.json({
+        return res.json(404, {
           error: "Erreur lors de l\'enregistrement de votre vote",
         });
       }
     })
     .catch(function(error) {
-      return res.json({
+      return res.json(404, {
         error: error
       });
     });

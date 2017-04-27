@@ -12,7 +12,6 @@ const mongoose = require('mongoose');
 let portServer;
 let portMongodb;
 process.argv.forEach(function (val, index, array) {
-  console.log(index, val);
   if (index === 2) {
     portServer = normalizePort(val);
   }
@@ -39,7 +38,6 @@ app.set('port', portServer);
 app.set('portMongodb', portMongodb);
 mongoose.connect('mongodb://127.0.0.1:' + portMongodb + '/server_sympozer', function(err){
   if(err){
-    console.log(err);
     process.exit(1);
   }
   else{

@@ -264,7 +264,6 @@ class UserMetier {
     return new Promise((resolve, reject) => {
       this.getById(id_user)
         .then((user) => {
-          console.log(user, user.id_person_ressource);
           this.personRessourceMetier.get(user.id_person_ressource)
             .then((person_ressource) => {
               return resolve(person_ressource);
@@ -468,7 +467,6 @@ class UserMetier {
       //Get user
       this.userDao.getByEmailSha1(email_sha1)
         .then((user) => {
-console.log(user);
           //If we don't have user by sha1, we search a person ressource by id
           if (!user) {
             this.personRessourceMetier.getByIdRessource(id_ressource)
@@ -487,8 +485,6 @@ console.log(user);
             //We get the person ressource about user
             this.personRessourceMetier.get(user.id_person_ressource)
               .then((personRessource) => {
-console.log(personRessource);
-console.log(id_ressource);
                 //We try to merge
                 if (id_ressource && id_ressource.length > 0 && (!personRessource.id_ressource || personRessource.id_ressource !== id_ressource)) {
                   //Check if we have a person ressource created by an admin with this id ressource
