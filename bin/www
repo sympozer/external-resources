@@ -8,11 +8,22 @@ var app = require('../app');
 var debug = require('debug')('express-sympozer:server');
 var http = require('http');
 
+let port;
+process.argv.forEach(function (val, index, array) {
+  if(index === 2){
+    port = normalizePort(val);
+  }
+});
+
+if(!port){
+  process.exit(1);
+}
+
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+//var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
