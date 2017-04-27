@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "babel-node ./bin/www",
-    "dev": "babel-node ./bin/www 3000 27017"
+    "dev": "babel-node ./bin/www 3000 127.0.0.1 27017"
   },
   "dependencies": {
     "babel-cli": "^6.24.1",
