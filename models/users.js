@@ -21,6 +21,11 @@ const UsersSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  type_social_network: {
+    type: String,
+    enum: ['google', 'facebook', 'linkedin', 'twitter'],
+    required: false,
+  },
   id_person_ressource: {
     type: String,
     required: true,

@@ -45,12 +45,14 @@ router.post('/', function(req, res, next) {
 router.get('/login/social', function(req, res, next){
   const email = req.query.email;
   const id_social_network = req.query.id_social_network;
+  const type_social_network = req.query.type_social_network;
 
   const userMetier = new UserMetier();
-  userMetier.loginBySocialNetwork(email, id_social_network)
+  userMetier.loginBySocialNetwork(email, id_social_network, type_social_network)
     .then(function(user) {
       req.session.user_id = user._id;
       req.session.is_admin = false;
+      req.session.type_social_network = type_social_network;
       return res.redirect("/profile");
     })
     .catch(function(error) {

@@ -260,11 +260,12 @@ class UsersDao {
     });
   }
 
-  getByEmailAndIdSocialNetwork(email, id_social_network){
+  getByEmailAndIdSocialNetwork(email, id_social_network, type_social_network){
     return new Promise((resolve, reject) => {
       Users.findOne({
         email: email,
         id_social_network: id_social_network,
+        type_social_network: type_social_network,
       }, (err, user) => {
         if(err){
           return reject('Erreur lors de la récupération du compte');
@@ -275,13 +276,14 @@ class UsersDao {
     });
   }
 
-  addBySocialNetwork(email, email_sha1, id_social_network, id_person_ressource){
+  addBySocialNetwork(email, email_sha1, id_social_network, type_social_network, id_person_ressource){
     return new Promise((resolve, reject) => {
       const user = new Users({
         email: email,
         email_sha1: email_sha1,
         id_social_network: id_social_network,
         id_person_ressource: id_person_ressource,
+        type_social_network: type_social_network,
       });
 
       user.save((err) => {

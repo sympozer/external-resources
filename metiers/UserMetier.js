@@ -577,7 +577,7 @@ class UserMetier {
     });
   }
 
-  loginBySocialNetwork(email, id_social_network) {
+  loginBySocialNetwork(email, id_social_network, type_social_network) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
         return reject('Erreur lors de la récupération de votre email');
@@ -591,8 +591,12 @@ class UserMetier {
         return reject('Votre email n\'est pas au bon format');
       }
 
+      if(!type_social_network || type_social_network.length === 0){
+        return reject('Vous devez spécifier un type de reseau social');
+      }
+
       //We try to get user account
-      this.userDao.getByEmailAndIdSocialNetwork(email, id_social_network)
+      this.userDao.getByEmailAndIdSocialNetwork(email, id_social_network, type_social_network)
         .then((user) => {
           //If we don't have an account, we create it
           if (!user) {
@@ -601,7 +605,7 @@ class UserMetier {
               .then((personRessource) => {
               console.log(personRessource);
                 //Create user account
-                this.createAccountBySocialNetwork(email, id_social_network, personRessource._id)
+                this.createAccountBySocialNetwork(email, id_social_network, type_social_network, personRessource._id)
                   .then((user) => {
                     if (!user) {
                       return reject('Erreur lors de la récupération de votre compte');
@@ -628,7 +632,7 @@ class UserMetier {
     });
   }
 
-  createAccountBySocialNetwork(email, id_social_network, id_person_ressource) {
+  createAccountBySocialNetwork(email, id_social_network, type_social_network, id_person_ressource) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
         return reject('Erreur lors de la récupération de votre email');
@@ -652,15 +656,19 @@ class UserMetier {
         return reject('Erreur lors du cryptage de votre email');
       }
 
+      if(!type_social_network || type_social_network.length === 0){
+        return reject('Vous devez spécifier un type de réseau social');
+      }
+
       //Check if an account don't exist with this email
       this.userDao.getByEmail(email)
         .then((user) => {
           if (user) {
-            return reject('Un compte eiste déjà avec cet email');
+            return reject('Un compte existe déjà avec cet email');
           }
 
           //Create user account
-          this.userDao.addBySocialNetwork(email, email_sha1, id_social_network, id_person_ressource)
+          this.userDao.addBySocialNetwork(email, email_sha1, id_social_network, type_social_network, id_person_ressource)
             .then((user) => {
               if (!user) {
                 return reject('Erreur lors de la création de votre compte');
