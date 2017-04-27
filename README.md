@@ -1,9 +1,12 @@
 # backend_express_sympozer
 
-Préalable : Avoir un serveur mongodb qui tourne sur cette url : mongodb://127.0.0.1:27017/server_sympozer et avoir créé une database sous le nom "server_sympozer"
+First : 
 
-Installer les dépendances : npm install
+- You need a mongodb database which run on mongodb://127.0.0.1:27017/server_sympozer
+- Have a database with name : "server_sympozer"
 
-Run l'app : npm start
+Install dependencies : npm install
 
-Serveur sur : http://localhost:3000
+Run app : npm start
+
+You can see the app on : http://localhost:3000
