@@ -17,4 +17,10 @@
         </div>
         <button type="submit" class="btn btn-success">Log in</button>
     </form>
+    <div class="g-signin2" data-onsuccess="googleSignIn"></div>
+    <a href="#" id="disconnect-google">Sign out</a>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/js/social_network.js"></script>
 {% endblock %}

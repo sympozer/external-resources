@@ -42,6 +42,24 @@ router.post('/', function(req, res, next) {
     });
 });
 
+router.get('/login/social', function(req, res, next){
+  const email = req.query.email;
+  const id_social_network = req.query.id_social_network;
+
+  const userMetier = new UserMetier();
+  userMetier.loginBySocialNetwork(email, id_social_network)
+    .then(function(user) {
+      req.session.user_id = user._id;
+      req.session.is_admin = false;
+      return res.redirect("/profile");
+    })
+    .catch(function(error) {
+      return res.json({
+        error: error
+      });
+    });
+});
+
 /* Log out */
 router.get('/logout', function(req, res, next) {
   SessionMetier.destroy(req.session)

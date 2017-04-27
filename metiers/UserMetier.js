@@ -552,7 +552,7 @@ class UserMetier {
                       return reject(error);
                     });
                 }
-                else if(personRessource) {
+                else if (personRessource) {
                   this.personRessourceMetier.setIdRessource(personRessource._id, id_ressource)
                     .then(() => {
                       personRessource.id_ressource = id_ressource;
@@ -562,7 +562,7 @@ class UserMetier {
                       return reject(error);
                     });
                 }
-                else{
+                else {
                   return reject();
                 }
               })
@@ -570,6 +570,107 @@ class UserMetier {
                 return reject(error);
               });
           }
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  loginBySocialNetwork(email, id_social_network) {
+    return new Promise((resolve, reject) => {
+      if (!email || email.length === 0) {
+        return reject('Erreur lors de la récupération de votre email');
+      }
+
+      if (!id_social_network || id_social_network.length === 0) {
+        return reject('Erreur lors de la récupération de votre identifiant');
+      }
+
+      if (!validator.isEmail(email)) {
+        return reject('Votre email n\'est pas au bon format');
+      }
+
+      //We try to get user account
+      this.userDao.getByEmailAndIdSocialNetwork(email, id_social_network)
+        .then((user) => {
+          //If we don't have an account, we create it
+          if (!user) {
+            //Create person ressource
+            this.personRessourceMetier.createByDefault()
+              .then((personRessource) => {
+              console.log(personRessource);
+                //Create user account
+                this.createAccountBySocialNetwork(email, id_social_network, personRessource._id)
+                  .then((user) => {
+                    if (!user) {
+                      return reject('Erreur lors de la récupération de votre compte');
+                    }
+
+                    return resolve(user);
+                  })
+                  .catch((error) => {
+                    return reject(error);
+                  });
+              })
+              .catch((error) => {
+                return reject(error);
+              });
+          }
+          else {
+            //Else we return the user
+            return resolve(user);
+          }
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  createAccountBySocialNetwork(email, id_social_network, id_person_ressource) {
+    return new Promise((resolve, reject) => {
+      if (!email || email.length === 0) {
+        return reject('Erreur lors de la récupération de votre email');
+      }
+
+      if (!id_social_network || id_social_network.length === 0) {
+        return reject('Erreur lors de la récupération de votre identifiant');
+      }
+
+      if(!id_person_ressource || id_person_ressource.length === 0){
+        return reject('Erreur lors de la récupération de votre ressource');
+      }
+
+      if (!validator.isEmail(email)) {
+        return reject('Votre email n\'est pas au bon format');
+      }
+
+      //Create SHA1 from user email
+      const email_sha1 = sha1(email);
+      if (!email_sha1 || email_sha1.length === 0) {
+        return reject('Erreur lors du cryptage de votre email');
+      }
+
+      //Check if an account don't exist with this email
+      this.userDao.getByEmail(email)
+        .then((user) => {
+          if (user) {
+            return reject('Un compte eiste déjà avec cet email');
+          }
+
+          //Create user account
+          this.userDao.addBySocialNetwork(email, email_sha1, id_social_network, id_person_ressource)
+            .then((user) => {
+              if (!user) {
+                return reject('Erreur lors de la création de votre compte');
+              }
+
+              return resolve(user);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         })
         .catch((error) => {
           return reject(error);

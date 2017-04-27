@@ -15,7 +15,11 @@ const UsersSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false,
+  },
+  id_social_network: {
+    type: String,
+    required: false,
   },
   id_person_ressource: {
     type: String,
