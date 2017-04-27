@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const UserMetier = require('../metiers/UserMetier');
+const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 
 /* Page profile */
 router.get('/', function (req, res, next) {
   const idUser = req.session.user_id;
 
   const userMetier = new UserMetier();
-  userMetier.getById(idUser)
-    .then(function (user) {
-      return res.render('profile', {user: user});
+  userMetier.getPersonRessource(idUser)
+    .then(function (person_ressource) {
+      return res.render('profile', {person_ressource: person_ressource});
     })
     .catch(function (error) {
       return res.render('profile', {error: error});
@@ -27,13 +28,32 @@ router.post('/', function (req, res, next) {
   const googleaccount = req.body.googleaccount;
   const linkedinaccount = req.body.linkedinaccount;
   const homepage = req.body.homepage;
+  const photoUrl = req.body.photoUrl;
 
   const userMetier = new UserMetier();
-  userMetier.update(idUser, lastname, firstname, twitterpage, facebookpage, googleaccount, linkedinaccount, homepage)
-    .then(function (user) {
-      return res.redirect('/profile');
+  const personRessourceMetier = new PersonRessourceMetier();
+
+  userMetier.getById(idUser)
+    .then((user) => {
+
+      personRessourceMetier.update(
+        user.id_person_ressource,
+        lastname,
+        firstname,
+        twitterpage,
+        facebookpage,
+        googleaccount,
+        linkedinaccount,
+        homepage,
+        photoUrl)
+        .then(() => {
+          return res.redirect('/profile');
+        })
+        .catch((error) => {
+          return res.render('profile', {error: error});
+        });
     })
-    .catch(function (error) {
+    .catch((error) => {
       return res.render('profile', {error: error});
     });
 });
@@ -71,36 +91,6 @@ router.get('/avatar', function (req, res, next) {
     })
     .catch(function (error) {
       return res.render('avatar', {error: error});
-    });
-});
-
-/* Upload user avatar */
-router.post('/avatar', function (req, res, next) {
-  const idUser = req.session.user_id;
-
-  const avatar = req.body.url_photo;
-
-  const userMetier = new UserMetier();
-  userMetier.updateAvatar(idUser, avatar)
-    .then(function (userUpdated) {
-      return res.redirect('/profile');
-    })
-    .catch(function (error) {
-      return res.redirect('/profile');
-    });
-});
-
-/* Remove user avatar */
-router.get('/avatar/remove', function (req, res, next) {
-  const idUser = req.session.user_id;
-
-  const userMetier = new UserMetier();
-  userMetier.removeAvatar(idUser)
-    .then(function () {
-      res.redirect('/profile');
-    })
-    .catch(function () {
-      res.redirect('/profile');
     });
 });
 

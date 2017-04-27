@@ -1,16 +1,15 @@
 var express = require('express');
 var router = express.Router();
 const UserMetier = require('../metiers/UserMetier');
+const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 const SessionMetier = require('../metiers/SessionMetier');
 
 router.get('/dashboard', function(req, res, next){
   return res.render('admin_dashboard');
 });
 
-router.post('/manage/profil/user', function(req, res, next){
-  const idUser = req.session.user_id;
-
-  const user_id = req.body.user_id;
+router.post('/manage/ressource/person', function(req, res, next){
+  const id_person_ressource = req.body.id_person_ressource;
   const lastname = req.body.lastname;
   const firstname = req.body.firstname;
   const twitterpage = req.body.twitterpage;
@@ -18,53 +17,27 @@ router.post('/manage/profil/user', function(req, res, next){
   const googleaccount = req.body.googleaccount;
   const linkedinaccount = req.body.linkedinaccount;
   const homepage = req.body.homepage;
+  const photoUrl = req.body.photoUrl;
 
-  const userMetier = new UserMetier();
-  userMetier.update(user_id, lastname, firstname, twitterpage, facebookpage, googleaccount, linkedinaccount, homepage)
-    .then(function (user) {
+  const personRessourceMetier = new PersonRessourceMetier();
+  personRessourceMetier.update(id_person_ressource, lastname, firstname, twitterpage, facebookpage, googleaccount, linkedinaccount, homepage, photoUrl)
+    .then(() => {
       return res.redirect('/admin/dashboard');
     })
-    .catch(function (error) {
+    .catch((error) => {
       return res.render('admin_dashboard', {error: error});
     });
 });
 
-router.get('/manage/user/:id/avatar/remove', function(req, res, next){
-  const idUser = req.params.id;
+router.post('/create/ressource/person', function(req, res, next){
+  const id_ressource = req.body.person_id_ressource;
+  const personRessourceMetier = new PersonRessourceMetier();
 
-  const userMetier = new UserMetier();
-  userMetier.removeAvatar(idUser)
-    .then(function () {
-      return res.redirect('/admin/dashboard');
+  personRessourceMetier.adminCreate(id_ressource)
+    .then((personRessource) => {
+      return res.render('manage_profil_user', {person_ressource: personRessource});
     })
-    .catch(function (error) {
-      return res.render('admin_dashboard', {error: error});
-    });
-});
-
-router.post('/manage/user/avatar/change', function(req, res, next){
-  const idUser = req.body.user_id;
-
-  const avatar = req.body.url_photo;
-  const userMetier = new UserMetier();
-  userMetier.updateAvatar(idUser, avatar)
-    .then(function (userUpdated) {
-      return res.redirect('/admin/dashboard');
-    })
-    .catch(function (error) {
-      return res.render('admin_dashboard', {error: error});
-    });
-});
-
-router.post('/create/person', function(req, res, next){
-  const person_id_ressource = req.body.person_id_ressource;
-
-  const userMetier = new UserMetier();
-  userMetier.addByAdmin(person_id_ressource)
-    .then(function (user) {
-      return res.render('manage_profil_user', {user: user});
-    })
-    .catch(function (error) {
+    .catch((error) => {
       return res.render('admin_dashboard', {error: error});
     });
 });

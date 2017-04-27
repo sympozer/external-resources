@@ -150,7 +150,7 @@ class UsersDao {
    * @param password - user password
    * @returns {Promise}
    */
-  add(email, email_sha1, password) {
+  add(email, email_sha1, password, id_person_ressource) {
     return new Promise((resolve, reject) => {
       this.getByEmail(email)
         .then((user) => {
@@ -162,6 +162,7 @@ class UsersDao {
             email: email,
             email_sha1: email_sha1,
             password: password,
+            id_person_ressource: id_person_ressource,
           });
 
           user.save((err) => {
@@ -235,30 +236,6 @@ class UsersDao {
       Users.update({_id: id}, {
         $set: {
           id_ressource: id_ressource,
-        }
-      }, (err, userUpdated) => {
-        if (err) {
-          return reject('Erreur lors de la modification de vos informations');
-        }
-
-        return resolve(userUpdated);
-      });
-    });
-  }
-
-  mergeInformations(id, user){
-    return new Promise((resolve, reject) => {
-      Users.update({_id: id}, {
-        $set: {
-          firstname: user.firstname,
-          lastname: user.lastname,
-          avatar: user.avatar,
-          twitterpage: user.twitterpage,
-          facebookpage: user.facebookpage,
-          googleaccount: user.googleaccount,
-          linkedinaccount: user.linkedinaccount,
-          homepage: user.homepage,
-          id_ressource: user.id_ressource,
         }
       }, (err, userUpdated) => {
         if (err) {

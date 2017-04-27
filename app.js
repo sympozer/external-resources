@@ -14,6 +14,7 @@ const index = require('./routes/index');
 const profile = require('./routes/profil');
 const admin = require('./routes/admin');
 const admin_search = require('./routes/admin_search');
+const personRessource = require('./routes/api/personRessource');
 
 const mongoose   = require('mongoose');
 
@@ -92,6 +93,7 @@ app.use('/', index);
 app.use('/profile', profile);
 app.use('/admin', admin);
 app.use('/admin/search', admin_search);
+app.use('/api', personRessource);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

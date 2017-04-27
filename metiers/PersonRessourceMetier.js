@@ -1,0 +1,203 @@
+/**
+ * Created by pierremarsot on 27/04/2017.
+ */
+const PersonRessourceDao = require('../dao/PersonRessourceDao');
+const validator = require('validator');
+
+class PersonRessourceMetier {
+  constructor() {
+    this.personRessourceDao = new PersonRessourceDao();
+  }
+
+  get(id) {
+    return new Promise((resolve, reject) => {
+      if (!id || id.length === 0) {
+        return reject('Erreur lors de la récupération de l\'identifiant de la ressource');
+      }
+
+      this.personRessourceDao.get(id)
+        .then((personRessource) => {
+          if (!personRessource) {
+            return reject('Erreur lors de la récupération de la ressource');
+          }
+
+          return resolve(personRessource);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  getByIdRessource(id) {
+    return new Promise((resolve, reject) => {
+      if (!id || id.length === 0) {
+        return reject('Erreur lors de la récupération de l\'identifiant de la ressource');
+      }
+
+      this.personRessourceDao.getByIdRessource(id)
+        .then((personRessource) => {
+          if (!personRessource) {
+            return reject('Erreur lors de la récupération de la ressource');
+          }
+
+          return resolve(personRessource);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  update(id, lastname, firstname, twitterpage, facebookpage, googleaccount, linkedinaccount, homepage, photoUrl) {
+    return new Promise((resolve, reject) => {
+
+      //Check if id exist
+      if (!id) {
+        return reject('Erreur lors de la récupération de votre identifiant');
+      }
+
+      //Check is twitter page is a correct format
+      if (twitterpage && twitterpage.length > 0) {
+        if (!validator.isURL(twitterpage)) {
+          return reject('L\'url de votre page twitter n\'est pas valide');
+        }
+      }
+
+      //Check is facebook page is a correct format
+      if (facebookpage && facebookpage.length > 0) {
+        if (!validator.isURL(facebookpage)) {
+          return reject('L\'url de votre page facebook n\'est pas valide');
+        }
+      }
+
+      //Check is google page is a correct format
+      if (googleaccount && googleaccount.length > 0) {
+        if (!validator.isURL(googleaccount)) {
+          return reject('L\'url de votre page google n\'est pas valide');
+        }
+      }
+
+      //Check is linkedin page is a correct format
+      if (linkedinaccount && linkedinaccount.length > 0) {
+        if (!validator.isURL(linkedinaccount)) {
+          return reject('L\'url de votre page linkedin n\'est pas valide');
+        }
+      }
+
+      //Check is homepage is a correct format
+      if (homepage && homepage.length > 0) {
+        if (!validator.isURL(homepage)) {
+          return reject('L\'url de votre page n\'est pas valide');
+        }
+      }
+
+      //Check is photo url is a correct format
+      if (photoUrl && photoUrl.length > 0) {
+        if (!validator.isURL(photoUrl)) {
+          return reject('L\'url de votre photo n\'est pas valide');
+        }
+      }
+
+      //Get user
+      this.get(id)
+        .then((personRessource) => {
+          if (!personRessource) {
+            return reject('Erreur lors de la récupération de la ressource');
+          }
+
+          //Set new informations
+          personRessource.lastname = lastname;
+          personRessource.firstname = firstname;
+          personRessource.facebookpage = facebookpage;
+          personRessource.twitterpage = twitterpage;
+          personRessource.googleaccount = googleaccount;
+          personRessource.linkedinaccount = linkedinaccount;
+          personRessource.homepage = homepage;
+          personRessource.photoUrl = photoUrl;
+
+          //Update personRessource
+          this.personRessourceDao.update(personRessource)
+            .then(() => {
+              return resolve(personRessource);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  createByDefault() {
+    return new Promise((resolve, reject) => {
+      this.personRessourceDao.createByDefault()
+        .then((personRessource) => {
+          if (!personRessource) {
+            return reject('Erreur lors de la création de la ressource');
+          }
+
+          return resolve(personRessource);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  adminCreate(id_ressource) {
+    return new Promise((resolve, reject) => {
+      this.personRessourceDao.adminCreate(id_ressource)
+        .then((personRessource) => {
+          if (!personRessource) {
+            return reject('Erreur lors de la création de la ressource');
+          }
+
+          return resolve(personRessource);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  mergeInformations(personRessource) {
+    return new Promise((resolve, reject) => {
+      this.personRessourceDao.mergeInformations(personRessource)
+        .then(() => {
+          return resolve();
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  remove(id) {
+    return new Promise((resolve, reject) => {
+      this.personRessourceDao.remove(id)
+        .then(() => {
+          return resolve();
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  setIdRessource(id, id_ressource) {
+    return new Promise((resolve, reject) => {
+      this.personRessourceDao.setIdRessource(id, id_ressource)
+        .then(() => {
+          return resolve();
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+}
+
+module.exports = PersonRessourceMetier;

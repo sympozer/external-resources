@@ -7,10 +7,12 @@ const validator = require('validator');
 const sha1 = require('sha1');
 const Bcrypt = require('../tools/Bcrypt');
 const uuidV1 = require('uuid/v1');
+const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 
 class UserMetier {
   constructor() {
     this.userDao = new UserDao();
+    this.personRessourceMetier = new PersonRessourceMetier();
   }
 
   /**
@@ -143,7 +145,7 @@ class UserMetier {
    * @param facebookpage - new facebook page
    * @returns {Promise}
    */
-  update(id, lastname, firstname, twitterpage, facebookpage, googleaccount, linkedinaccount, homepage) {
+  update(id, lastname, firstname, twitterpage, facebookpage, googleaccount, linkedinaccount, homepage, photoUrl) {
     return new Promise((resolve, reject) => {
 
       //Check if id exist
@@ -186,6 +188,13 @@ class UserMetier {
         }
       }
 
+      //Check is photo url is a correct format
+      if (photoUrl && photoUrl.length > 0) {
+        if (!validator.isURL(photoUrl)) {
+          return reject('L\'url de votre photo n\'est pas valide');
+        }
+      }
+
       //Get user
       this.getById(id)
         .then((user) => {
@@ -194,19 +203,26 @@ class UserMetier {
             return reject('Erreur lors de la récupération de votre compte');
           }
 
-          //Set new informations
-          user.lastname = lastname;
-          user.firstname = firstname;
-          user.facebookpage = facebookpage;
-          user.twitterpage = twitterpage;
-          user.googleaccount = googleaccount;
-          user.linkedinaccount = linkedinaccount;
-          user.homepage = homepage;
+          this.personRessourceMetier.get(user.id_person_ressource)
+            .then((personRessource) => {
+              //Set new informations
+              personRessource.lastname = lastname;
+              personRessource.firstname = firstname;
+              personRessource.facebookpage = facebookpage;
+              personRessource.twitterpage = twitterpage;
+              personRessource.googleaccount = googleaccount;
+              personRessource.linkedinaccount = linkedinaccount;
+              personRessource.homepage = homepage;
+              personRessource.photoUrl = photoUrl;
 
-          //Update user
-          this.userDao.update(id, user)
-            .then((userUpdated) => {
-              return resolve(userUpdated);
+              //Update personRessource
+              this.personRessourceMetier.update(personRessource)
+                .then(() => {
+                  return resolve(personRessource);
+                })
+                .catch((error) => {
+                  return reject(error);
+                });
             })
             .catch((error) => {
               return reject(error);
@@ -233,7 +249,29 @@ class UserMetier {
       //Get user
       this.userDao.getById(id)
         .then((user) => {
+          if (!user) {
+            return reject('Erreur lors de la récupération de votre compte');
+          }
           return resolve(user);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  getPersonRessource(id_user) {
+    return new Promise((resolve, reject) => {
+      this.getById(id_user)
+        .then((user) => {
+          console.log(user, user.id_person_ressource);
+          this.personRessourceMetier.get(user.id_person_ressource)
+            .then((person_ressource) => {
+              return resolve(person_ressource);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         })
         .catch((error) => {
           return reject(error);
@@ -378,14 +416,21 @@ class UserMetier {
             return reject('Un compte existe déjà avec cet email');
           }
 
-          //Hash password
-          const bcrypt = new Bcrypt();
-          bcrypt.crypt(password)
-            .then((hash) => {
-              //Create account
-              this.userDao.add(email, email_sha1, hash)
-                .then((user) => {
-                  return resolve(user);
+          //Create person ressource
+          this.personRessourceMetier.createByDefault()
+            .then((personRessource) => {
+              //Hash password
+              const bcrypt = new Bcrypt();
+              bcrypt.crypt(password)
+                .then((hash) => {
+                  //Create account
+                  this.userDao.add(email, email_sha1, hash, personRessource._id)
+                    .then((user) => {
+                      return resolve(user);
+                    })
+                    .catch((error) => {
+                      return reject(error);
+                    });
                 })
                 .catch((error) => {
                   return reject(error);
@@ -423,89 +468,111 @@ class UserMetier {
       //Get user
       this.userDao.getByEmailSha1(email_sha1)
         .then((user) => {
-
+console.log(user);
+          //If we don't have user by sha1, we search a person ressource by id
           if (!user) {
-            this.userDao.getByIdRessource(id_ressource)
-              .then((user) => {
-                if (!user) {
+            this.personRessourceMetier.getByIdRessource(id_ressource)
+              .then((personRessource) => {
+                if (!personRessource) {
                   return reject();
                 }
 
-                return resolve(user);
+                return resolve(personRessource);
               })
               .catch((error) => {
                 return reject(error);
               });
           }
           else {
-            if (id_ressource && id_ressource.length > 0 && !user.id_ressource) {
-              //Check if we have a account create by an admin with this id ressource
-              this.userDao.getByIdRessource(id_ressource)
-                .then((userCreatedByAdmin) => {
-                  if (userCreatedByAdmin) {
-                    //We have an account created by an admin, we merge informations
-                    if (!user.firstname) {
-                      user.firstname = userCreatedByAdmin.firstname;
-                    }
-                    if (!user.lastname) {
-                      user.lastname = userCreatedByAdmin.lastname;
-                    }
-                    if (!user.avatar) {
-                      user.avatar = userCreatedByAdmin.avatar;
-                    }
-                    if (!user.twitterpage) {
-                      user.twitterpage = userCreatedByAdmin.twitterpage;
-                    }
-                    if (!user.facebookpage) {
-                      user.facebookpage = userCreatedByAdmin.facebookpage;
-                    }
-                    if (!user.googleaccount) {
-                      user.googleaccount = userCreatedByAdmin.googleaccount;
-                    }
-                    if (!user.linkedinaccount) {
-                      user.linkedinaccount = userCreatedByAdmin.linkedinaccount;
-                    }
-                    if (!user.homepage) {
-                      user.homepage = userCreatedByAdmin.homepage;
-                    }
+            //We get the person ressource about user
+            this.personRessourceMetier.get(user.id_person_ressource)
+              .then((personRessource) => {
+console.log(personRessource);
+console.log(id_ressource);
+                //We try to merge
+                if (id_ressource && id_ressource.length > 0 && (!personRessource.id_ressource || personRessource.id_ressource !== id_ressource)) {
+                  //Check if we have a person ressource created by an admin with this id ressource
+                  this.personRessourceMetier.getByIdRessource(id_ressource)
+                    .then((personRessourceCreatedByAdmin) => {
+                      if (personRessourceCreatedByAdmin) {
+                        //We have an person ressource created by an admin, we merge informations
+                        if (!personRessource.firstname) {
+                          personRessource.firstname = personRessourceCreatedByAdmin.firstname;
+                        }
+                        if (!personRessource.lastname) {
+                          personRessource.lastname = personRessourceCreatedByAdmin.lastname;
+                        }
+                        if (!personRessource.photoUrl) {
+                          personRessource.photoUrl = personRessourceCreatedByAdmin.photoUrl;
+                        }
+                        if (!personRessource.twitterpage) {
+                          personRessource.twitterpage = personRessourceCreatedByAdmin.twitterpage;
+                        }
+                        if (!personRessource.facebookpage) {
+                          personRessource.facebookpage = personRessourceCreatedByAdmin.facebookpage;
+                        }
+                        if (!personRessource.googleaccount) {
+                          personRessource.googleaccount = personRessourceCreatedByAdmin.googleaccount;
+                        }
+                        if (!personRessource.linkedinaccount) {
+                          personRessource.linkedinaccount = personRessourceCreatedByAdmin.linkedinaccount;
+                        }
+                        if (!personRessource.homepage) {
+                          personRessource.homepage = personRessourceCreatedByAdmin.homepage;
+                        }
+                        if (!personRessource.id_ressource) {
+                          personRessource.id_ressource = personRessourceCreatedByAdmin.id_ressource;
+                        }
 
-                    user.id_ressource = id_ressource;
-
-                    //We save user
-                    this.userDao.mergeInformations(user._id, user)
-                      .then(() => {
-                        //We remove the user account created by admin
-                        this.userDao.remove(userCreatedByAdmin._id)
+                        //We save user
+                        this.personRessourceMetier.mergeInformations(personRessource)
                           .then(() => {
-                            return resolve(user);
+                            //We remove the user account created by admin
+                            this.personRessourceMetier.remove(personRessourceCreatedByAdmin._id)
+                              .then(() => {
+                                return resolve(personRessource);
+                              })
+                              .catch((error) => {
+                                return reject(error);
+                              });
                           })
                           .catch((error) => {
                             return reject(error);
                           });
-                      })
-                      .catch((error) => {
-                        return reject(error);
-                      });
-                  }
-                  else {
-                    //We don't have an account create by an admin, so we set the id ressource to the user account
-                    this.userDao.setIdRessource(user._id, id_ressource)
-                      .then(() => {
-                        user.id_ressource = id_ressource;
-                        return resolve(user);
-                      })
-                      .catch((error) => {
-                        return reject(error);
-                      });
-                  }
-                })
-                .catch((error) => {
-                  return reject(error);
-                });
-            }
-            else {
-              return resolve(user);
-            }
+                      }
+                      else {
+                        //We don't have an account create by an admin, so we set the id ressource to the user account
+                        this.personRessourceMetier.setIdRessource(personRessource._id, id_ressource)
+                          .then(() => {
+                            personRessource.id_ressource = id_ressource;
+                            return resolve(personRessource);
+                          })
+                          .catch((error) => {
+                            return reject(error);
+                          });
+                      }
+                    })
+                    .catch((error) => {
+                      return reject(error);
+                    });
+                }
+                else if(personRessource) {
+                  this.personRessourceMetier.setIdRessource(personRessource._id, id_ressource)
+                    .then(() => {
+                      personRessource.id_ressource = id_ressource;
+                      return resolve(personRessource);
+                    })
+                    .catch((error) => {
+                      return reject(error);
+                    });
+                }
+                else{
+                  return reject();
+                }
+              })
+              .catch((error) => {
+                return reject(error);
+              });
           }
         })
         .catch((error) => {

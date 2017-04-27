@@ -17,45 +17,9 @@ const UsersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  lastname: {
+  id_person_ressource: {
     type: String,
-    required: false,
-  },
-  firstname: {
-    type: String,
-    required: false,
-  },
-  avatar: {
-    type: String,
-    required: false,
-  },
-  avatar_view: {
-    type: String,
-    required: false,
-  },
-  twitterpage: {
-    type: String,
-    required: false,
-  },
-  facebookpage: {
-    type: String,
-    required: false,
-  },
-  googleaccount: {
-    type: String,
-    required: false,
-  },
-  linkedinaccount: {
-    type: String,
-    required: false,
-  },
-  homepage: {
-    type: String,
-    required: false,
-  },
-  id_ressource: {
-    type: String,
-    required: false,
+    required: true,
   },
 }, { minimize: false });
 
