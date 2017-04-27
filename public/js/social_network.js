@@ -10,13 +10,21 @@ function googleSignIn(googleUser) {
   $(location).attr('href', '/login/social?email='+profile.getEmail()+'&id_social_network='+profile.getId()+'&type_social_network=google');
 }
 
+function logout(){
+  $(location).attr('href', '/logout');
+}
+
 $(document).ready(function(){
   /* Google + */
+
+  gapi.load('auth2', function() {
+    gapi.auth2.init();
+  });
 
   $(document).on('click', '#disconnect-google', function(){
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
-      console.log('User signed out.');
+      logout();
     });
   });
   /* End Google + */

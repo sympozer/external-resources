@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>{{ title }}</title>
-    <meta name="google-signin-client_id" content="218413310491-9qjqf68aqtlfjcb0uog7kik72crliohh.apps.googleusercontent.com">
+    <meta name="google-signin-client_id"
+          content="218413310491-9qjqf68aqtlfjcb0uog7kik72crliohh.apps.googleusercontent.com">
     <link rel='stylesheet' href='/css/bootstrap.min.css'/>
 </head>
 <body>
@@ -29,7 +30,17 @@
                     {% else %}
                         <li><a href="/profile">My profile</a></li>
                     {% endif %}
-                    <li><a href="/logout">Log out</a></li>
+
+                    {% if session.type_social_network %}
+                        {% if session.type_social_network == 'google' %}
+                            <a href="#" id="disconnect-google">Log out</a>
+                        {% elseif session.type_social_network == 'linkedin' %}
+                        {% elseif session.type_social_network == 'twitter' %}
+                        {% elseif session.type_social_network == 'facebook' %}
+                        {% endif %}
+                    {% else %}
+                        <li><a href="/logout">Log out</a></li>
+                    {% endif %}
                 {% else %}
                     <li><a href="/">Home</a></li>
                     <li><a href="/register">Register</a></li>
@@ -47,7 +58,8 @@
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
 <script src="/js/bootstrap.min.js"></script>
-<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/platform.js"></script>
+<script src="/js/social_network.js"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

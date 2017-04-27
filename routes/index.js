@@ -88,6 +88,7 @@ router.post('/register', function(req, res, next){
   userMetier.add(email, password, confirmPassword)
     .then(function(user){
       req.session.user_id = user._id;
+      req.session.is_admin = false;
       return res.redirect("/profile");
     })
     .catch(function(error){
