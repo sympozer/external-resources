@@ -149,13 +149,28 @@ class PersonRessourceMetier {
 
   adminCreate(id_ressource) {
     return new Promise((resolve, reject) => {
-      this.personRessourceDao.adminCreate(id_ressource)
+      if (!id_ressource || id_ressource.length === 0) {
+        return reject('Erreur lors de la récupération de l\'identifiant de la ressource');
+      }
+
+      this.getByIdRessource(id_ressource)
         .then((personRessource) => {
-          if (!personRessource) {
-            return reject('Erreur lors de la création de la ressource');
+          if (personRessource) {
+            return reject('Une person ressource existe déjà avec cet identifiant');
           }
 
-          return resolve(personRessource);
+          //Check if a person ressource exist with this id
+          this.personRessourceDao.adminCreate(id_ressource)
+            .then((personRessource) => {
+              if (!personRessource) {
+                return reject('Erreur lors de la création de la ressource');
+              }
+
+              return resolve(personRessource);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         })
         .catch((error) => {
           return reject(error);
