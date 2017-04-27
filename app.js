@@ -15,10 +15,8 @@ const profile = require('./routes/profil');
 const admin = require('./routes/admin');
 const admin_search = require('./routes/admin_search');
 const personRessource = require('./routes/api/personRessource');
-
-const mongoose   = require('mongoose');
-
-mongoose.connect('mongodb://127.0.0.1:27017/server_sympozer'); // connect to our database
+const auth = require('./routes/api/auth');
+const vote = require('./routes/api/vote');
 
 //Check if we have a default admin account
 new AdminsMetier().setDefaultAdminAccount();
@@ -94,6 +92,8 @@ app.use('/profile', profile);
 app.use('/admin', admin);
 app.use('/admin/search', admin_search);
 app.use('/api', personRessource);
+app.use('/api/login', auth);
+app.use('/api/vote', vote);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

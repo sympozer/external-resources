@@ -6,16 +6,16 @@ const jwtsimple = require('jwt-simple'),
   config = require('../config');
 
 class JwtMetier {
-  static createToken(user){
+  static createToken(id){
     try
     {
-      if(!user || !user.id){
+      if(!id || id.length === 0){
         return null;
       }
 
       const expires = moment().add('days', 7).valueOf();
       return jwtsimple.encode({
-        iss: user.id,
+        iss: id,
         exp: expires
       }, config.key_jwt);
 
@@ -28,7 +28,6 @@ class JwtMetier {
   static decodeToken(token){
     try {
       var decoded = jwtsimple.decode(token, config.key_jwt);
-      console.log(decoded, 'decoded');
       if(!decoded || !decoded.iss){
         return null;
       }

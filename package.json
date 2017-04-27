@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "babel-node ./bin/www 3000"
+    "start": "babel-node ./bin/www",
+    "dev": "babel-node ./bin/www 3000 27017"
   },
   "dependencies": {
     "babel-cli": "^6.24.1",
@@ -14,6 +15,8 @@
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "express-session": "^1.15.2",
+    "jsonwebtoken": "^7.4.0",
+    "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
     "mongoose": "^4.9.5",
     "mongoose-api-query": "^0.1.1-pre",
