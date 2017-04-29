@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
       return res.render('profile', {person_ressource: person_ressource});
     })
     .catch(function (error) {
-      return res.render('profile', {error: error});
+      return res.redirect(req.app.get('baseurl') + "profile");
     });
 });
 
@@ -50,11 +50,11 @@ router.post('/', function (req, res, next) {
           return res.redirect(req.app.get('baseurl') + 'profile');
         })
         .catch((error) => {
-          return res.render('profile', {error: error});
+          return res.redirect(req.app.get('baseurl') + "profile");
         });
     })
     .catch((error) => {
-      return res.render('profile', {error: error});
+      return res.redirect(req.app.get('baseurl') + "profile");
     });
 });
 
@@ -76,7 +76,7 @@ router.post('/update_password', function (req, res, next) {
       return res.redirect(req.app.get('baseurl') + 'profile');
     })
     .catch(function (error) {
-      return res.render('profile', {error: error});
+      return res.redirect(req.app.get('baseurl') + "profile/update_password");
     });
 });
 
@@ -90,7 +90,7 @@ router.get('/avatar', function (req, res, next) {
       return res.render('avatar', {user: user});
     })
     .catch(function (error) {
-      return res.render('avatar', {error: error});
+      return res.redirect(req.app.get('baseurl') + "profile/avatar");
     });
 });
 

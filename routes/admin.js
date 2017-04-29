@@ -25,7 +25,7 @@ router.post('/manage/ressource/person', function(req, res, next){
       return res.redirect(req.app.get('baseurl') + 'admin/dashboard');
     })
     .catch((error) => {
-      return res.render('admin_dashboard', {error: error});
+      return res.redirect(req.app.get('baseurl') + "/admin/dashboard");
     });
 });
 
@@ -38,7 +38,7 @@ router.post('/create/ressource/person', function(req, res, next){
       return res.render('manage_profil_user', {person_ressource: personRessource});
     })
     .catch((error) => {
-      return res.render('admin_dashboard', {error: error});
+      return res.redirect(req.app.get('baseurl') + "/admin/dashboard");
     });
 });
 

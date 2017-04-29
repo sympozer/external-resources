@@ -92,7 +92,7 @@ router.post('/register', function(req, res, next){
       return res.redirect(req.app.get('baseurl') + "profile");
     })
     .catch(function(error){
-      return res.render("register", {error: error});
+      return res.redirect(req.app.get('baseurl') + "register");
     });
 });
 
