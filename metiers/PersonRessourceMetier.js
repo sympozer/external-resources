@@ -37,10 +37,6 @@ class PersonRessourceMetier {
 
       this.personRessourceDao.getByIdRessource(id)
         .then((personRessource) => {
-          if (!personRessource) {
-            return reject('Erreur lors de la récupération de la ressource');
-          }
-
           return resolve(personRessource);
         })
         .catch((error) => {
