@@ -7,11 +7,11 @@ function googleSignIn(googleUser) {
   console.log('Name: ' + profile.getName());
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-  $(location).attr('href', '/login/social?email='+profile.getEmail()+'&id_social_network='+profile.getId()+'&type_social_network=google');
+  $(location).attr('href', 'login/social?email='+profile.getEmail()+'&id_social_network='+profile.getId()+'&type_social_network=google');
 }
 
 function logout(){
-  $(location).attr('href', '/logout');
+  $(location).attr('href', 'logout');
 }
 
 $(document).ready(function(){
