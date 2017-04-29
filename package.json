@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "babel-node ./bin/www",
+    "start": "NODE_ENV=production babel-node ./bin/www",
     "production": "NODE_ENV=production npm start",
     "dev": "babel-node ./bin/www 3000 127.0.0.1 27017",
     "devprod": "NODE_ENV=production babel-node ./bin/www 3000 127.0.0.1 27017"
