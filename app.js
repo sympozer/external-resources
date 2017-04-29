@@ -10,6 +10,23 @@ const cors = require('cors');
 const AdminsMetier = require('./metiers/AdminsMetier');
 const SessionMetier = require('./metiers/SessionMetier');
 
+const app = express();
+
+let baseUrl = '/';
+if(app.get('env') === "production"){
+  baseUrl = '/external/';
+}
+
+console.log(baseUrl);
+
+//Middleware baseurl
+app.use(function(req,res,next){
+  res.locals.baseurl = baseUrl;
+  return next();
+});
+
+app.set('baseurl', baseUrl);
+
 const index = require('./routes/index');
 const profile = require('./routes/profil');
 const admin = require('./routes/admin');
@@ -20,8 +37,6 @@ const vote = require('./routes/api/vote');
 
 //Check if we have a default admin account
 new AdminsMetier().setDefaultAdminAccount();
-
-const app = express();
 
 /* Check if upload folder exist */
 try {
@@ -44,10 +59,10 @@ app.all('(/profile/*)|(/profile)', function(req,res,next){
   if(!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== false){
     SessionMetier.destroy(req.session)
       .then(function(){
-        return res.redirect("/");
+        return res.redirect(req.app.get('baseurl'));
       })
       .catch(function(){
-        return res.redirect("/");
+        return res.redirect(req.app.get('baseurl'));
       });
   }
   else {
@@ -60,10 +75,10 @@ app.all('(/admin/*)|(/admin)', function(req,res,next){
   if(!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== true){
     SessionMetier.destroy(req.session)
       .then(function(){
-        return res.redirect("/");
+        return res.redirect(req.app.get('baseurl'));
       })
       .catch(function(){
-        return res.redirect("/");
+        return res.redirect(req.app.get('baseurl'));
       });
   }
   else{
@@ -71,20 +86,8 @@ app.all('(/admin/*)|(/admin)', function(req,res,next){
   }
 });
 
-let baseUrl = '/';
-if(app.get('env') === "production"){
-  baseUrl = '/external/';
-}
 
-console.log(baseUrl);
-
-//Middleware baseurl
-app.use(function(req,res,next){
-  res.locals.baseurl = baseUrl;
-  return next();
-});
-
-
+app.set('baseurl', baseUrl);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

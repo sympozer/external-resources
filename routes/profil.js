@@ -47,7 +47,7 @@ router.post('/', function (req, res, next) {
         homepage,
         photoUrl)
         .then(() => {
-          return res.redirect('/profile');
+          return res.redirect(req.app.get('baseurl') + 'profile');
         })
         .catch((error) => {
           return res.render('profile', {error: error});
@@ -73,7 +73,7 @@ router.post('/update_password', function (req, res, next) {
   const userMetier = new UserMetier();
   userMetier.updatePassword(idUser, password, confirmPassword)
     .then(function (user) {
-      return res.redirect('/profile');
+      return res.redirect(req.app.get('baseurl') + 'profile');
     })
     .catch(function (error) {
       return res.render('profile', {error: error});

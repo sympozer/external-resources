@@ -22,7 +22,7 @@ router.post('/manage/ressource/person', function(req, res, next){
   const personRessourceMetier = new PersonRessourceMetier();
   personRessourceMetier.update(id_person_ressource, lastname, firstname, twitterpage, facebookpage, googleaccount, linkedinaccount, homepage, photoUrl)
     .then(() => {
-      return res.redirect('/admin/dashboard');
+      return res.redirect(req.app.get('baseurl') + 'admin/dashboard');
     })
     .catch((error) => {
       return res.render('admin_dashboard', {error: error});

@@ -12,7 +12,7 @@ router.post('/ressource/person', function (req, res, next) {
       return res.render('manage_profil_user', {person_ressource: personRessource});
     })
     .catch((error) => {
-      return res.redirect('/admin/dashboard');
+      return res.redirect(req.app.get('baseurl') + 'admin/dashboard');
     });
 });
 

@@ -19,7 +19,7 @@ router.post('/', function(req, res, next) {
     .then(function(user) {
       req.session.user_id = user._id;
       req.session.is_admin = false;
-      return res.redirect("/profile");
+      return res.redirect(req.app.get('baseurl') + "profile");
     })
     .catch(function(error) {
       //Check if it's an admin account
@@ -28,7 +28,7 @@ router.post('/', function(req, res, next) {
         .then((admin) => {
           req.session.user_id = admin._id;
           req.session.is_admin = true;
-          return res.redirect("/admin/dashboard");
+          return res.redirect(req.app.get('baseurl') + "admin/dashboard");
         })
         .catch((error) => {
           SessionMetier.destroy(req.session)
@@ -36,7 +36,7 @@ router.post('/', function(req, res, next) {
               return res.render("index", {error: error});
             })
             .catch(function(){
-              return res.redirect("/");
+              return res.redirect(req.app.get('baseurl'));
             });
         });
     });
@@ -53,7 +53,7 @@ router.get('/login/social', function(req, res, next){
       req.session.user_id = user._id;
       req.session.is_admin = false;
       req.session.type_social_network = type_social_network;
-      return res.redirect("/profile");
+      return res.redirect(req.app.get('baseurl') + "profile");
     })
     .catch(function(error) {
       return res.json({
@@ -66,10 +66,10 @@ router.get('/login/social', function(req, res, next){
 router.get('/logout', function(req, res, next) {
   SessionMetier.destroy(req.session)
     .then(function(){
-      return res.redirect("/");
+      return res.redirect(req.app.get('baseurl'));
     })
     .catch(function(){
-      return res.redirect("/");
+      return res.redirect(req.app.get('baseurl'));
     });
 });
 
@@ -89,7 +89,7 @@ router.post('/register', function(req, res, next){
     .then(function(user){
       req.session.user_id = user._id;
       req.session.is_admin = false;
-      return res.redirect("/profile");
+      return res.redirect(req.app.get('baseurl') + "profile");
     })
     .catch(function(error){
       return res.render("register", {error: error});
