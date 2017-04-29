@@ -51,7 +51,7 @@ mongoose.connect('mongodb://' + hostMongodb + ':' + portMongodb + '/server_sympo
      */
 
     server.listen(portServer);
-    console.log('server listening on port : ' + portServer);
+    console.log('server listning on port : ' + portServer);
     server.on('error', onError);
     server.on('listening', onListening);
   }

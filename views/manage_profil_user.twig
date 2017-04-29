@@ -16,7 +16,7 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="profile">
-                <form method="POST" action="/admin/manage/ressource/person">
+                <form method="POST" action="admin/manage/ressource/person">
                     <input type="text" class="hidden" value="{{ person_ressource._id }}" name="id_person_ressource"/>
                     {% include 'form_profile.twig' %}
                 </form>

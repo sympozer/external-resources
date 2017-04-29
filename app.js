@@ -71,6 +71,19 @@ app.all('(/admin/*)|(/admin)', function(req,res,next){
   }
 });
 
+let baseUrl = '/';
+if(app.get('env') === "production"){
+  baseUrl = '/external/';
+}
+
+console.log(baseUrl);
+
+//Middleware baseurl
+app.use(function(req,res,next){
+  res.locals.baseurl = baseUrl;
+  return next();
+});
+
 
 
 // view engine setup
@@ -92,7 +105,7 @@ app.use('/profile', profile);
 app.use('/admin', admin);
 app.use('/admin/search', admin_search);
 app.use('/api', personRessource);
-app.use('/api/login', auth);
+app.use('/api', auth);
 app.use('/api/vote', vote);
 
 // catch 404 and forward to error handler

@@ -4,7 +4,8 @@
     <title>{{ title }}</title>
     <meta name="google-signin-client_id"
           content="218413310491-9qjqf68aqtlfjcb0uog7kik72crliohh.apps.googleusercontent.com">
-    <link rel='stylesheet' href='/css/bootstrap.min.css'/>
+    <base href="{{ baseurl }}">
+    <link rel='stylesheet' href='css/bootstrap.min.css'/>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -26,9 +27,9 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if session.user_id %}
                     {% if session.is_admin and session.is_admin == true %}
-                        <li><a href="/admin/dashboard">Dashboard</a></li>
+                        <li><a href="admin/dashboard">Dashboard</a></li>
                     {% else %}
-                        <li><a href="/profile">My profile</a></li>
+                        <li><a href="profile">My profile</a></li>
                     {% endif %}
 
                     {% if session.type_social_network %}
@@ -39,11 +40,11 @@
                         {% elseif session.type_social_network == 'facebook' %}
                         {% endif %}
                     {% else %}
-                        <li><a href="/logout">Log out</a></li>
+                        <li><a href="logout">Log out</a></li>
                     {% endif %}
                 {% else %}
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/register">Register</a></li>
+                    <li><a href=".">Home</a></li>
+                    <li><a href="register">Register</a></li>
                 {% endif %}
             </ul>
         </div><!-- /.navbar-
@@ -57,9 +58,9 @@
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
-<script src="/js/bootstrap.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="https://apis.google.com/js/platform.js"></script>
-<script src="/js/social_network.js"></script>
+<script src="js/social_network.js"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
