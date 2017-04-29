@@ -7,6 +7,6 @@ First :
 
 Install dependencies : npm install
 
-Run app : npm start server-port host-mongodb port-mongodb
+Run app : npm start server-port mongodb-host mongodb-port
 
-You can see the app on : http://localhost:server-port
+You can see the app on : http://host:server-port
