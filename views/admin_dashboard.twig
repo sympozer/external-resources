@@ -34,4 +34,35 @@
             </form>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Search Track Ressource</h1>
+            <form method="POST" action="admin/search/ressource/track">
+                <div class="form-group">
+                    <label for="track-id-ressource">Track id ressource</label>
+                    <input type="text" class="form-control" id="track-id-ressource" placeholder="Track id ressource"
+                           name="track_id_ressource">
+                </div>
+                <button type="submit" class="btn btn-success">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Create Track Ressource</h1>
+            <form method="POST" action="admin/create/ressource/track">
+                <div class="form-group">
+                    <label for="track-id-ressource">Track id ressource</label>
+                    <input type="text" class="form-control" id="track-id-ressource" placeholder="Track id ressource"
+                           name="track_id_ressource">
+                </div>
+                <div class="form-group">
+                    <label for="label">Label</label>
+                    <input type="text" class="form-control" id="label" placeholder="Label"
+                           name="label">
+                </div>
+                <button type="submit" class="btn btn-success">Create</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

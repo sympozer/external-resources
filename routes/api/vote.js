@@ -24,13 +24,13 @@ router.get('/', function(req, res, next){
         return res.sendStatus(200);
       }
       else{
-        return res.json(404, {
+        return res.json(403, {
           error: "Erreur lors de l\'enregistrement de votre vote",
         });
       }
     })
     .catch(function(error) {
-      return res.json(404, {
+      return res.json(403, {
         error: error
       });
     });

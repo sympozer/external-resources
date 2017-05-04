@@ -1,0 +1,96 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+    <div>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#track_info" aria-controls="track_info" role="tab" data-toggle="tab">Track info</a>
+            </li>
+            <li role="presentation">
+                <a href="#chairs" aria-controls="chairs" role="tab" data-toggle="tab">Chairs</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="track_info">
+                <form method="POST" action="admin/ressource/track/update">
+                    <input type="text" class="hidden" value="{{ track._id }}" name="id_track"/>
+                    <div class="form-group">
+                        <label for="id_ressource">Id ressource</label>
+                        <input type="text"
+                               class="form-control"
+                               id="id_ressource"
+                               placeholder="Id ressource"
+                               name="id_ressource"
+                               value="{{ track.id_ressource }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        {{ track.label }}
+                        <label for="label">Label</label>
+                        <input type="text"
+                               class="form-control"
+                               id="label"
+                               placeholder="Label"
+                               name="label"
+                               value="{{ track.label }}"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-success">Update</button>
+                </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="chairs">
+                {% if track.chairs.length > 0 %}
+                    <table class="table">
+                        <caption>Chairs.</caption>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Email</th>
+                            <th>Remove</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for chair in track.chairs %}
+                            <tr>
+                                <th scope="row">{{ loop.index }}</th>
+                                <td>{{ chair }}</td>
+                                <td>
+                                    <a role="button" class="btn btn-danger btn-sm"
+                                       href="/admin/ressource/track/{{ track._id }}/remove/chair/{{ chair }}">
+                                        Remove
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-info">
+                        No chairs into this track
+                    </div>
+                {% endif %}
+                <form method="POST" action="admin/ressource/track/add/chair">
+                    <input type="text" class="hidden" value="{{ track._id }}" name="id_track"/>
+                    <div class="form-group">
+                        <label for="email_chair">Chair's email</label>
+                        <input type="text"
+                               class="form-control"
+                               id="email_chair"
+                               placeholder="Chair's email"
+                               name="email_chair"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-success">Add chair</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const UserMetier = require('../metiers/UserMetier');
 const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
+const TrackRessourceMetier = require('../metiers/TrackRessourceMetier');
 const SessionMetier = require('../metiers/SessionMetier');
 
 router.get('/dashboard', function(req, res, next){
@@ -39,6 +40,71 @@ router.post('/create/ressource/person', function(req, res, next){
     })
     .catch((error) => {
       return res.redirect(req.app.get('baseurl') + "/admin/dashboard");
+    });
+});
+
+router.post('/create/ressource/track', function(req, res, next){
+  const id_ressource = req.body.track_id_ressource;
+  const label = req.body.label;
+
+  const trackRessourceMetier = new TrackRessourceMetier();
+
+  trackRessourceMetier.add(id_ressource, label)
+    .then((track) => {
+      return res.render('manage_track', {track: track});
+    })
+    .catch((error) => {
+    console.log(error);
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
+    });
+});
+
+router.post('/ressource/track/add/chair', function(req, res, next){
+  const id_track = req.body.id_track;
+  const email_chair = req.body.email_chair;
+
+  const trackRessourceMetier = new TrackRessourceMetier();
+
+  trackRessourceMetier.addChair(id_track, email_chair)
+    .then((track) => {
+      return res.render('manage_track', {track: track});
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
+    });
+});
+
+router.get('/ressource/track/:idTrack/remove/chair/:email', function(req, res, next){
+  const id_track = req.params.idTrack;
+  const email_chair = req.params.email;
+
+  const trackRessourceMetier = new TrackRessourceMetier();
+
+  trackRessourceMetier.removeChair(id_track, email_chair)
+    .then((track) => {
+      return res.render('manage_track', {track: track});
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
+    });
+});
+
+router.post('/ressource/track/update', function(req, res, next){
+  const id_ressource = req.body.id_ressource;
+  const label = req.body.label;
+  const id_track = req.body.id_track;
+
+  const trackRessourceMetier = new TrackRessourceMetier();
+
+  trackRessourceMetier.update(id_track, id_ressource, label)
+    .then((track) => {
+      return res.render('manage_track', {track: track});
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
     });
 });
 

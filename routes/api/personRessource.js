@@ -10,9 +10,11 @@ router.get('/ressource/person', function(req, res, next){
   const userMetier = new UserMetier();
   userMetier.getByEmailSha1(email_sha1, id_ressource)
     .then(function(user){
+      console.log(user);
       return res.json(user);
     })
     .catch(function(error){
+      console.log(error);
       return res.json({
         error: error
       });
