@@ -8,11 +8,13 @@ const sha1 = require('sha1');
 const Bcrypt = require('../tools/Bcrypt');
 const uuidV1 = require('uuid/v1');
 const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
+const VotesMetier = require('../metiers/VotesMetier');
 
 class UserMetier {
   constructor() {
     this.userDao = new UserDao();
     this.personRessourceMetier = new PersonRessourceMetier();
+    this.votesMetier = new VotesMetier();
   }
 
   /**
@@ -591,7 +593,7 @@ class UserMetier {
         return reject('Votre email n\'est pas au bon format');
       }
 
-      if(!type_social_network || type_social_network.length === 0){
+      if (!type_social_network || type_social_network.length === 0) {
         return reject('Vous devez spécifier un type de reseau social');
       }
 
@@ -603,7 +605,7 @@ class UserMetier {
             //Create person ressource
             this.personRessourceMetier.createByDefault()
               .then((personRessource) => {
-              console.log(personRessource);
+                console.log(personRessource);
                 //Create user account
                 this.createAccountBySocialNetwork(email, id_social_network, type_social_network, personRessource._id)
                   .then((user) => {
@@ -642,7 +644,7 @@ class UserMetier {
         return reject('Erreur lors de la récupération de votre identifiant');
       }
 
-      if(!id_person_ressource || id_person_ressource.length === 0){
+      if (!id_person_ressource || id_person_ressource.length === 0) {
         return reject('Erreur lors de la récupération de votre ressource');
       }
 
@@ -656,7 +658,7 @@ class UserMetier {
         return reject('Erreur lors du cryptage de votre email');
       }
 
-      if(!type_social_network || type_social_network.length === 0){
+      if (!type_social_network || type_social_network.length === 0) {
         return reject('Vous devez spécifier un type de réseau social');
       }
 
@@ -679,6 +681,22 @@ class UserMetier {
             .catch((error) => {
               return reject(error);
             });
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  getTrackVoted(id_user) {
+    return new Promise((resolve, reject) => {
+      if (!id_user || id_user.length === 0) {
+        return reject('Erreur lors de la récupération de votre identifiant');
+      }
+
+      this.votesMetier.getTrackVoted(id_user)
+        .then((trackVoted) => {
+          return resolve(trackVoted);
         })
         .catch((error) => {
           return reject(error);

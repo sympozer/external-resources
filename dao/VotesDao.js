@@ -8,10 +8,11 @@ class VotesDao {
 
   }
 
-  userAlreadyVoted(id_user){
+  userAlreadyVoted(id_user, id_track){
     return new Promise((resolve, reject) => {
       Votes.count({
-        id_user: id_user
+        id_user: id_user,
+        id_track: id_track
       }, (err, count) => {
         if(err){
           return reject('Erreur');
@@ -22,11 +23,12 @@ class VotesDao {
     });
   }
 
-  add(id_user, id_ressource){
+  add(id_user, id_ressource, id_track){
     return new Promise((resolve, reject) => {
       const vote = new Votes({
         id_user: id_user,
         id_ressource: id_ressource,
+        id_track: id_track,
       });
 
       vote.save((err) => {
@@ -35,6 +37,20 @@ class VotesDao {
         }
 
         return resolve(vote);
+      });
+    });
+  }
+
+  getTrackVoted(id_user){
+    return new Promise((resolve, reject) => {
+      Votes.find({
+        id_user: id_user
+      }, (err, votes) => {
+        if(err){
+          return reject('Erreur lors de la récupération de vos tracks déjà votées')
+        }
+
+        return resolve(votes);
       });
     });
   }

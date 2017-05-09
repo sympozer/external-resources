@@ -34,6 +34,7 @@ const admin_search = require('./routes/admin_search');
 const personRessource = require('./routes/api/personRessource');
 const auth = require('./routes/api/auth');
 const vote = require('./routes/api/vote');
+const user = require('./routes/api/user');
 
 //Check if we have a default admin account
 new AdminsMetier().setDefaultAdminAccount();
@@ -110,6 +111,7 @@ app.use('/admin/search', admin_search);
 app.use('/api', personRessource);
 app.use('/api', auth);
 app.use('/api/vote', vote);
+app.use('/api/user', user);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

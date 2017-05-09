@@ -3,14 +3,11 @@
  */
 var express = require('express');
 var router = express.Router();
-const VotesMetier = require('../../metiers/VotesMetier');
+const UserMetier = require('../../metiers/UserMetier');
 const JwtMetier = require('../../metiers/JwtMetier');
 
-router.post('/', function(req, res, next){
-  console.log(req.body);
-  const token = req.body.token;
-  const id_ressource = req.body.id_ressource;
-  const id_track = req.body.id_track;
+router.get('/vote/information', function(req, res, next){
+  const token = req.query.token;
 
   const id_user = JwtMetier.decodeToken(token);
   if(!id_user){
@@ -19,15 +16,15 @@ router.post('/', function(req, res, next){
     });
   }
 
-  const votesMetier = new VotesMetier();
-  votesMetier.add(id_user, id_ressource, id_track)
-    .then(function(vote) {
-      if(vote){
-        return res.sendStatus(200);
+  const userMetier = new UserMetier();
+  userMetier.getTrackVoted(id_user)
+    .then(function(trackVoted) {
+      if(trackVoted){
+        return res.json(200, trackVoted);
       }
       else{
         return res.json(403, {
-          error: "Erreur lors de l\'enregistrement de votre vote",
+          error: "Erreur lors de la récupération des tracks votées",
         });
       }
     })

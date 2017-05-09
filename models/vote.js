@@ -16,6 +16,11 @@ const VoteSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  id_track: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   date: {
     type: Date,
     default: Date.now,
