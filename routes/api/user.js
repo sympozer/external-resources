@@ -10,6 +10,7 @@ router.get('/vote/information', function(req, res, next){
   const token = req.query.token;
 
   const id_user = JwtMetier.decodeToken(token);
+  console.log(id_user);
   if(!id_user){
     return res.json(404, {
       error: "Erreur lors de la récupération de votre identifiant",

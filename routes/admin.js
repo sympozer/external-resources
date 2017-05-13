@@ -6,7 +6,14 @@ const TrackRessourceMetier = require('../metiers/TrackRessourceMetier');
 const SessionMetier = require('../metiers/SessionMetier');
 
 router.get('/dashboard', function(req, res, next){
-  return res.render('admin_dashboard');
+  const personRessourceMetier = new PersonRessourceMetier();
+  personRessourceMetier.find()
+    .then((personsRessources) => {
+      return res.render('admin_dashboard', {personsRessources: personsRessources});
+    })
+    .catch((error) => {
+      return res.render('admin_dashboard', {error: error});
+    });
 });
 
 router.post('/manage/ressource/person', function(req, res, next){

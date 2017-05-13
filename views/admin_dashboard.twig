@@ -8,61 +8,113 @@
             </div>
         </div>
     {% endif %}
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Search a ressource</h1>
-            <form method="POST" action="admin/search/ressource/person">
-                <div class="form-group">
-                    <label for="person-id-ressource">Person id ressource</label>
-                    <input type="text" class="form-control" id="person-id-ressource" placeholder="Person id ressource"
-                           name="person_id_ressource">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#manage-ressource" aria-controls="profile" role="tab" data-toggle="tab">Manage ressource</a>
+        </li>
+        {% if personsRessources and personsRessources.length > 0 %}
+            <li role="presentation">
+                <a href="#show-person-ressource" aria-controls="showpersonressource" role="tab" data-toggle="tab">
+                    Person ressource created</a>
+            </li>
+        {% endif %}
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="manage-ressource">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Search a ressource</h1>
+                    <form method="POST" action="admin/search/ressource/person">
+                        <div class="form-group">
+                            <label for="person-id-ressource">Person id ressource</label>
+                            <input type="text" class="form-control" id="person-id-ressource"
+                                   placeholder="Person id ressource"
+                                   name="person_id_ressource">
+                        </div>
+                        <button type="submit" class="btn btn-success">Search</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-success">Search</button>
-            </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Create Person Ressource</h1>
+                    <form method="POST" action="admin/create/ressource/person">
+                        <div class="form-group">
+                            <label for="person-id-ressource">Person id ressource</label>
+                            <input type="text" class="form-control" id="person-id-ressource"
+                                   placeholder="Person id ressource"
+                                   name="person_id_ressource">
+                        </div>
+                        <button type="submit" class="btn btn-success">Create</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Search Track Ressource</h1>
+                    <form method="POST" action="admin/search/ressource/track">
+                        <div class="form-group">
+                            <label for="track-id-ressource">Track id ressource</label>
+                            <input type="text" class="form-control" id="track-id-ressource"
+                                   placeholder="Track id ressource"
+                                   name="track_id_ressource">
+                        </div>
+                        <button type="submit" class="btn btn-success">Search</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Create Track Ressource</h1>
+                    <form method="POST" action="admin/create/ressource/track">
+                        <div class="form-group">
+                            <label for="track-id-ressource">Track id ressource</label>
+                            <input type="text" class="form-control" id="track-id-ressource"
+                                   placeholder="Track id ressource"
+                                   name="track_id_ressource">
+                        </div>
+                        <div class="form-group">
+                            <label for="label">Label</label>
+                            <input type="text" class="form-control" id="label" placeholder="Label"
+                                   name="label">
+                        </div>
+                        <button type="submit" class="btn btn-success">Create</button>
+                    </form>
+                </div>
+            </div>
         </div>
+
+
+        {% if personsRessources and personsRessources.length > 0 %}
+            <div role="tabpanel" class="tab-pane" id="show-person-ressource">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Id Ressource</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for personRessource in personsRessources %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>
+                                {% if not personRessource.id_ressource or personRessource.id_ressource is empty %}
+                                    <span class="text-info">Non renseigné</span>
+                                {% else %}
+                                    {{ personRessource.id_ressource }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Create Person Ressource</h1>
-            <form method="POST" action="admin/create/ressource/person">
-                <div class="form-group">
-                    <label for="person-id-ressource">Person id ressource</label>
-                    <input type="text" class="form-control" id="person-id-ressource" placeholder="Person id ressource"
-                           name="person_id_ressource">
-                </div>
-                <button type="submit" class="btn btn-success">Create</button>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Search Track Ressource</h1>
-            <form method="POST" action="admin/search/ressource/track">
-                <div class="form-group">
-                    <label for="track-id-ressource">Track id ressource</label>
-                    <input type="text" class="form-control" id="track-id-ressource" placeholder="Track id ressource"
-                           name="track_id_ressource">
-                </div>
-                <button type="submit" class="btn btn-success">Search</button>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Create Track Ressource</h1>
-            <form method="POST" action="admin/create/ressource/track">
-                <div class="form-group">
-                    <label for="track-id-ressource">Track id ressource</label>
-                    <input type="text" class="form-control" id="track-id-ressource" placeholder="Track id ressource"
-                           name="track_id_ressource">
-                </div>
-                <div class="form-group">
-                    <label for="label">Label</label>
-                    <input type="text" class="form-control" id="label" placeholder="Label"
-                           name="label">
-                </div>
-                <button type="submit" class="btn btn-success">Create</button>
-            </form>
-        </div>
-    </div>
+
 {% endblock %}

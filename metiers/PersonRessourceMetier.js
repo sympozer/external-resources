@@ -9,6 +9,18 @@ class PersonRessourceMetier {
     this.personRessourceDao = new PersonRessourceDao();
   }
 
+  find() {
+    return new Promise((resolve, reject) => {
+      this.personRessourceDao.find()
+        .then((personsRessources) => {
+          return resolve(personsRessources);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
   get(id) {
     return new Promise((resolve, reject) => {
       if (!id || id.length === 0) {
@@ -54,32 +66,32 @@ class PersonRessourceMetier {
       }
 
       /*//Check is twitter page is a correct format
-      if (twitterpage && twitterpage.length > 0) {
-        if (!validator.isURL(twitterpage)) {
-          return reject('L\'url de votre page twitter n\'est pas valide');
-        }
-      }
+       if (twitterpage && twitterpage.length > 0) {
+       if (!validator.isURL(twitterpage)) {
+       return reject('L\'url de votre page twitter n\'est pas valide');
+       }
+       }
 
-      //Check is facebook page is a correct format
-      if (facebookpage && facebookpage.length > 0) {
-        if (!validator.isURL(facebookpage)) {
-          return reject('L\'url de votre page facebook n\'est pas valide');
-        }
-      }
+       //Check is facebook page is a correct format
+       if (facebookpage && facebookpage.length > 0) {
+       if (!validator.isURL(facebookpage)) {
+       return reject('L\'url de votre page facebook n\'est pas valide');
+       }
+       }
 
-      //Check is google page is a correct format
-      if (googleaccount && googleaccount.length > 0) {
-        if (!validator.isURL(googleaccount)) {
-          return reject('L\'url de votre page google n\'est pas valide');
-        }
-      }
+       //Check is google page is a correct format
+       if (googleaccount && googleaccount.length > 0) {
+       if (!validator.isURL(googleaccount)) {
+       return reject('L\'url de votre page google n\'est pas valide');
+       }
+       }
 
-      //Check is linkedin page is a correct format
-      if (linkedinaccount && linkedinaccount.length > 0) {
-        if (!validator.isURL(linkedinaccount)) {
-          return reject('L\'url de votre page linkedin n\'est pas valide');
-        }
-      }*/
+       //Check is linkedin page is a correct format
+       if (linkedinaccount && linkedinaccount.length > 0) {
+       if (!validator.isURL(linkedinaccount)) {
+       return reject('L\'url de votre page linkedin n\'est pas valide');
+       }
+       }*/
 
       //Check is homepage is a correct format
       if (homepage && homepage.length > 0) {

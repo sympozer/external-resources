@@ -8,6 +8,18 @@ class PersonRessourceDao {
 
   }
 
+  find(){
+    return new Promise((resolve, reject) => {
+      PersonRessources.find({}, (error, personsRessources) => {
+        if(error){
+          return reject('Erreur lors de la récupération des ressources');
+        }
+
+        return resolve(personsRessources);
+      });
+    });
+  }
+
   get(id){
     return new Promise((resolve, reject) => {
       PersonRessources.findOne({_id: id}, (err, personRessource) => {
