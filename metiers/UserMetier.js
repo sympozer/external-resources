@@ -265,13 +265,13 @@ class UserMetier {
 
   getPersonRessource(id_user) {
     return new Promise((resolve, reject) => {
-      console.log("getPersonRessource");
       //Get user profile information
       this.getById(id_user)
         .then((user) => {
           this.personRessourceMetier.get(user.id_person_ressource)
             .then((person_ressource) => {
               if (person_ressource) {
+                person_ressource.email_sha1 = user.email_sha1;
                 //Get track acces of user
                 const trackRessourceMetier = new TrackRessourceMetier();
                 trackRessourceMetier.getAllByIdUser(user._id)

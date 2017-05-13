@@ -13,7 +13,7 @@ router.post('/', function(req, res, next){
 
   const id_user = JwtMetier.decodeToken(token);
   if(!id_user){
-    return res.json(404, {
+    return res.json(403, {
       error: "Erreur lors de la récupération de votre identifiant",
     });
   }

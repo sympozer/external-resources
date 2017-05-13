@@ -53,7 +53,7 @@ class PersonRessourceMetier {
         return reject('Erreur lors de la récupération de votre identifiant');
       }
 
-      //Check is twitter page is a correct format
+      /*//Check is twitter page is a correct format
       if (twitterpage && twitterpage.length > 0) {
         if (!validator.isURL(twitterpage)) {
           return reject('L\'url de votre page twitter n\'est pas valide');
@@ -79,7 +79,7 @@ class PersonRessourceMetier {
         if (!validator.isURL(linkedinaccount)) {
           return reject('L\'url de votre page linkedin n\'est pas valide');
         }
-      }
+      }*/
 
       //Check is homepage is a correct format
       if (homepage && homepage.length > 0) {
