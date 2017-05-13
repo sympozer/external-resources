@@ -7,7 +7,6 @@ const VotesMetier = require('../../metiers/VotesMetier');
 const JwtMetier = require('../../metiers/JwtMetier');
 
 router.post('/', function(req, res, next){
-  console.log(req.body);
   const token = req.body.token;
   const id_ressource = req.body.id_ressource;
   const id_track = req.body.id_track;

@@ -53,8 +53,7 @@ router.post('/create/ressource/track', function(req, res, next){
     .then((track) => {
       return res.render('manage_track', {track: track});
     })
-    .catch((error) => {
-    console.log(error);
+    .catch(() => {
       return res.redirect(req.app.get('baseurl') + "admin/dashboard");
     });
 });
@@ -70,7 +69,6 @@ router.post('/ressource/track/add/chair', function(req, res, next){
       return res.render('manage_track', {track: track});
     })
     .catch((error) => {
-      console.log(error);
       return res.redirect(req.app.get('baseurl') + "admin/dashboard");
     });
 });
