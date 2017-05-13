@@ -104,7 +104,7 @@
                             <th scope="row">{{ loop.index }}</th>
                             <td>
                                 {% if not personRessource.id_ressource or personRessource.id_ressource is empty %}
-                                    <span class="text-info">Non renseigné</span>
+                                    <span class="text-info">Not specified</span>
                                 {% else %}
                                     {{ personRessource.id_ressource }}
                                 {% endif %}
