@@ -14,7 +14,7 @@ class VotesMetier {
         return reject('Erreur lors de la récupération de votre identifiant');
       }
 
-      if(!id_track){
+      if (!id_track) {
         return reject('Erreur lors de la récupération de la track');
       }
 
@@ -38,7 +38,7 @@ class VotesMetier {
         return reject('Erreur lors de la récupération de la ressource');
       }
 
-      if(!id_track){
+      if (!id_track) {
         return reject('Erreur lors de la récupération de la track');
       }
 
@@ -62,17 +62,17 @@ class VotesMetier {
     });
   }
 
-  getTrackVoted(id_user) {
+  getTrackVotedByUser(id_user) {
     return new Promise((resolve, reject) => {
-      this.votesDao.getTrackVoted(id_user)
+      this.votesDao.getTrackVotedByUser(id_user)
         .then((votes) => {
-          if(!votes || votes.length === 0){
+          if (!votes || votes.length === 0) {
             return resolve([]);
           }
 
           const trackVoted = [];
-          for(const vote of votes){
-            if(vote.id_track) {
+          for (const vote of votes) {
+            if (vote.id_track) {
               trackVoted.push(vote.id_track);
             }
           }
@@ -81,6 +81,33 @@ class VotesMetier {
         })
         .catch((error) => {
           return reject(error);
+        });
+    });
+  }
+
+  getStatisticTrackVoted(ids_tracks) {
+    return new Promise((resolve, reject) => {
+      //Get all track voted
+      const promises = [];
+
+      for (const id_track of ids_tracks) {
+        promises.push(this.votesDao.getSumTrackVoted(id_track));
+      }
+
+      Promise.all(promises)
+        .then((tracksInformationVoted) => {
+
+          const tabTracks = [];
+          for(const inf of tracksInformationVoted){
+            const find = tabTracks.find((t) => {
+              return t.id_track === inf;
+            });
+          }
+
+          return resolve(tracksInformationVoted);
+        })
+        .catch(() => {
+          return reject('Erreur lors de la récupération des tracks');
         });
     });
   }

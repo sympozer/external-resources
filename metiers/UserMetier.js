@@ -9,6 +9,7 @@ const Bcrypt = require('../tools/Bcrypt');
 const uuidV1 = require('uuid/v1');
 const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 const VotesMetier = require('../metiers/VotesMetier');
+const TrackRessourceMetier = require('../metiers/TrackRessourceMetier');
 
 class UserMetier {
   constructor() {
@@ -264,11 +265,44 @@ class UserMetier {
 
   getPersonRessource(id_user) {
     return new Promise((resolve, reject) => {
+      console.log("getPersonRessource");
+      //Get user profile information
       this.getById(id_user)
         .then((user) => {
           this.personRessourceMetier.get(user.id_person_ressource)
             .then((person_ressource) => {
-              return resolve(person_ressource);
+              if (person_ressource) {
+                //Get track acces of user
+                const trackRessourceMetier = new TrackRessourceMetier();
+                trackRessourceMetier.getAllByIdUser(user._id)
+                  .then((tracks_ressources) => {
+                    if (!tracks_ressources || tracks_ressources.length === 0) {
+                      return resolve(person_ressource);
+                    }
+
+                    //Get id from tracks_ressources
+                    const ids_tracks = [];
+                    for (const track_ressource of tracks_ressources) {
+                      ids_tracks.push(track_ressource.id_ressource);
+                    }
+
+                    this.votesMetier.getStatisticTrackVoted(ids_tracks)
+                      .then((tracksInformationVoted) => {
+                        console.log(tracksInformationVoted);
+                        person_ressource.tracks_information_voted = tracksInformationVoted;
+                        return resolve(person_ressource);
+                      })
+                      .catch((error) => {
+                        return reject(error);
+                      });
+                  })
+                  .catch((error) => {
+                    return reject(error);
+                  });
+              }
+              else {
+                return reject('Erreur lors de la récupération de votre profil');
+              }
             })
             .catch((error) => {
               return reject(error);
@@ -579,6 +613,26 @@ class UserMetier {
     });
   }
 
+  getByEmail(email_user) {
+    return new Promise((resolve, reject) => {
+      if (!email_user) {
+        return reject('Erreur lors de la récupération de l\'email');
+      }
+
+      if (!validator.isEmail(email_user)) {
+        return reject('L\'email n\'est pas valide');
+      }
+
+      this.userDao.getByEmail(email_user)
+        .then((user) => {
+          return resolve(user);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
   loginBySocialNetwork(email, id_social_network, type_social_network) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
@@ -688,13 +742,13 @@ class UserMetier {
     });
   }
 
-  getTrackVoted(id_user) {
+  getTrackVotedByUser(id_user) {
     return new Promise((resolve, reject) => {
       if (!id_user || id_user.length === 0) {
         return reject('Erreur lors de la récupération de votre identifiant');
       }
 
-      this.votesMetier.getTrackVoted(id_user)
+      this.votesMetier.getTrackVotedByUser(id_user)
         .then((trackVoted) => {
           return resolve(trackVoted);
         })

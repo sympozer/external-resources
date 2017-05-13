@@ -60,13 +60,13 @@ class TrackRessourceDao {
     });
   }
 
-  addChair(idTrack, emailPerson) {
+  addChair(idTrack, id_user) {
     return new Promise((resolve, reject) => {
       TrackRessources.findByIdAndUpdate(
         idTrack,
         {
           $push: {
-            chairs: emailPerson
+            chairs: id_user
           }
         }, (err, track) => {
           if (err) {
@@ -78,11 +78,11 @@ class TrackRessourceDao {
     });
   }
 
-  removeChair(idTrack, emailPerson) {
+  removeChair(idTrack, id_user) {
     return new Promise((resolve, reject) => {
       TrackRessources.update(
         {_id: idTrack},
-        {$pull: {'chairs': emailPerson}},
+        {$pull: {'chairs': id_user}},
         (err, track) => {
           if (err) {
             return reject('Erreur lors de la suppression du chair');
@@ -110,6 +110,22 @@ class TrackRessourceDao {
 
           return resolve(track);
         });
+    });
+  }
+
+  getAllTrackByUser(id_user){
+    return new Promise((resolve, reject) => {
+      TrackRessources.find({
+        chairs: {
+          "$in": [id_user]
+        }
+      }, (error, tracksRessource) => {
+        if(error){
+          return reject('Erreur lors de la récupération des tracks autorisés');
+        }
+
+        return resolve(tracksRessource);
+      });
     });
   }
 }

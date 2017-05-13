@@ -17,7 +17,7 @@ router.get('/vote/information', function(req, res, next){
   }
 
   const userMetier = new UserMetier();
-  userMetier.getTrackVoted(id_user)
+  userMetier.getTrackVotedByUser(id_user)
     .then(function(trackVoted) {
       if(trackVoted){
         return res.json(200, trackVoted);

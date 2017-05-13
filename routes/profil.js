@@ -13,7 +13,8 @@ router.get('/', function (req, res, next) {
       return res.render('profile', {person_ressource: person_ressource});
     })
     .catch(function (error) {
-      return res.redirect(req.app.get('baseurl') + "profile");
+      console.log(error);
+      return res.redirect(req.app.get('baseurl'));
     });
 });
 

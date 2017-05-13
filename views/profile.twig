@@ -4,7 +4,7 @@
     <div>
 
         {% if error %}
-        <div class="alert alert-danger">{{ error }}</div>
+            <div class="alert alert-danger">{{ error }}</div>
         {% endif %}
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
@@ -15,11 +15,14 @@
                 <a href="#changepassword" aria-controls="changepassword" role="tab" data-toggle="tab">
                     Change password</a>
             </li>
-            <li role="presentation">
-                <a href="#tracks" aria-controls="tracks" role="tab" data-toggle="tab">
-                    Track
-                </a>
-            </li>
+            {{ tracks_information_voted }}
+            {% if person_ressource.tracks_information_voted and person_ressource.tracks_information_voted.length > 0 %}
+                <li role="presentation">
+                    <a href="#tracks" aria-controls="tracks" role="tab" data-toggle="tab">
+                        Track
+                    </a>
+                </li>
+            {% endif %}
         </ul>
 
         <!-- Tab panes -->
@@ -46,9 +49,33 @@
                     <button type="submit" class="btn btn-success">Update my password</button>
                 </form>
             </div>
-            <div role="tabpanel" class="tab-pane" id="tracks">
+            {% if person_ressource.tracks_information_voted %}
+                <div role="tabpanel" class="tab-pane" id="tracks">
 
-            </div>
+                    {% if person_ressource.tracks_information_voted.length > 0 %}
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Id Track</th>
+                                <th>Vote</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for track in person_ressource.tracks_information_voted %}
+                                <tr>
+                                    <th scope="row">{{ loop.index }}</th>
+                                    <td>{{ track.id_track }}</td>
+                                    <td>
+                                        {{ track.count }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
 
     </div>

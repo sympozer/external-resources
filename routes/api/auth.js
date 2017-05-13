@@ -16,17 +16,17 @@ router.get('/login', function (req, res, next) {
       const token = JwtMetier.createToken(user._id);
 
       if (!token || token.length === 0) {
-        return res.json({
+        return res.json(403, {
           error: 'Erreur lors de la création du token'
         });
       }
 
-      return res.json({
+      return res.json(403, {
         token: token,
       });
     })
     .catch(function (error) {
-      return res.json({
+      return res.json(403, {
         error: error
       });
     });
@@ -70,17 +70,17 @@ router.post('/register', function (req, res, next) {
       const token = JwtMetier.createToken(user._id);
 
       if (!token || token.length === 0) {
-        return res.json({
+        return res.json(403, {
           error: 'Erreur lors de la création du token'
         });
       }
 
-      return res.json({
+      return res.json(403, {
         token: token,
       });
     })
     .catch(function (error) {
-      return res.json({
+      return res.json(403, {
         error: error
       });
     });

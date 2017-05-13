@@ -75,13 +75,13 @@ router.post('/ressource/track/add/chair', function(req, res, next){
     });
 });
 
-router.get('/ressource/track/:idTrack/remove/chair/:email', function(req, res, next){
+router.get('/ressource/track/:idTrack/remove/chair/:id_user', function(req, res, next){
   const id_track = req.params.idTrack;
-  const email_chair = req.params.email;
+  const id_user = req.params.id_user;
 
   const trackRessourceMetier = new TrackRessourceMetier();
 
-  trackRessourceMetier.removeChair(id_track, email_chair)
+  trackRessourceMetier.removeChair(id_track, id_user)
     .then((track) => {
       return res.render('manage_track', {track: track});
     })

@@ -4,17 +4,17 @@
 const Votes = require('../models/vote');
 
 class VotesDao {
-  constructor(){
+  constructor() {
 
   }
 
-  userAlreadyVoted(id_user, id_track){
+  userAlreadyVoted(id_user, id_track) {
     return new Promise((resolve, reject) => {
       Votes.count({
         id_user: id_user,
         id_track: id_track
       }, (err, count) => {
-        if(err){
+        if (err) {
           return reject('Erreur');
         }
 
@@ -23,7 +23,7 @@ class VotesDao {
     });
   }
 
-  add(id_user, id_ressource, id_track){
+  add(id_user, id_ressource, id_track) {
     return new Promise((resolve, reject) => {
       const vote = new Votes({
         id_user: id_user,
@@ -32,7 +32,7 @@ class VotesDao {
       });
 
       vote.save((err) => {
-        if(err){
+        if (err) {
           return reject('Erreur lors de l\'enregistrement de votre vote');
         }
 
@@ -41,17 +41,48 @@ class VotesDao {
     });
   }
 
-  getTrackVoted(id_user){
+  getTrackVotedByUser(id_user) {
     return new Promise((resolve, reject) => {
       Votes.find({
         id_user: id_user
       }, (err, votes) => {
-        if(err){
+        if (err) {
           return reject('Erreur lors de la récupération de vos tracks déjà votées')
         }
 
         return resolve(votes);
       });
+    });
+  }
+
+  getTracksVoted() {
+    return new Promise((resolve, reject) => {
+      Votes.find().distinct('id_track', function (error, ids) {
+        if (error) {
+          return reject('Erreur lors de la récupération des tracks');
+        }
+
+        return resolve(ids);
+      });
+    });
+  }
+
+  getSumTrackVoted(id_track) {
+    return new Promise((resolve, reject) => {
+      Votes.count({id_track: id_track}
+        , (error, count) => {
+          if (!count) {
+            return resolve({
+              id_track: id_track,
+              count: 0,
+            });
+          }
+
+          return resolve({
+            id_track: id_track,
+            count: count,
+          });
+        });
     });
   }
 }
