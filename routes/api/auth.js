@@ -4,11 +4,12 @@
 var express = require('express');
 var router = express.Router();
 const UserMetier = require('../../metiers/UserMetier');
+const PersonRessourceMetier = require('../../metiers/PersonRessourceMetier');
 const JwtMetier = require('../../metiers/JwtMetier');
 
-router.get('/login', function (req, res, next) {
-  const email = req.query.email;
-  const password = req.query.password;
+router.post('/login', function (req, res, next) {
+  const email = req.body.email;
+  const password = req.body.password;
 
   const userMetier = new UserMetier();
   userMetier.getByEmailAndPassword(email, password)
@@ -21,9 +22,21 @@ router.get('/login', function (req, res, next) {
         });
       }
 
-      return res.json(403, {
-        token: token,
-      });
+      const personRessourceMetier = new PersonRessourceMetier();
+      personRessourceMetier.get(user.id_person_ressource)
+        .then((personRessource) => {
+          return res.json(403, {
+            token: token,
+            lastname: personRessource.lastname,
+            firstname: personRessource.firstname,
+            photoUrl: personRessource.photoUrl,
+          });
+        })
+        .catch((error) => {
+          return res.json(403, {
+            error: error,
+          });
+        });
     })
     .catch(function (error) {
       return res.json(403, {
@@ -32,10 +45,10 @@ router.get('/login', function (req, res, next) {
     });
 });
 
-router.get('/login/social', function (req, res, next) {
-  const email = req.query.email;
-  const id_social_network = req.query.id_social_network;
-  const type_social_network = req.query.type_social_network;
+router.post('/login/social', function (req, res, next) {
+  const email = req.body.email;
+  const id_social_network = req.body.id_social_network;
+  const type_social_network = req.body.type_social_network;
 
   const userMetier = new UserMetier();
   userMetier.loginBySocialNetwork(email, id_social_network, type_social_network)
