@@ -25,7 +25,7 @@ router.post('/login', function (req, res, next) {
       const personRessourceMetier = new PersonRessourceMetier();
       personRessourceMetier.get(user.id_person_ressource)
         .then((personRessource) => {
-          return res.json(403, {
+          return res.json(200, {
             token: token,
             lastname: personRessource.lastname,
             firstname: personRessource.firstname,
