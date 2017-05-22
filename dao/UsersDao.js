@@ -163,6 +163,7 @@ class UsersDao {
             email_sha1: email_sha1,
             password: password,
             id_person_ressource: id_person_ressource,
+            activated: false,
           });
 
           user.save((err) => {
@@ -187,13 +188,30 @@ class UsersDao {
   getByEmail(email) {
     return new Promise((resolve, reject) => {
       Users.findOne({
-        email: email
+        email: email,
+        activated: true,
       }, (err, user) => {
         if (err) {
           return reject('Erreur lors de la récupération de votre compte');
         }
 
         return resolve(user);
+      });
+    });
+  }
+
+  activeAccount(id){
+    return new Promise((resolve, reject) => {
+      Users.update({_id: id}, {
+        $set: {
+          activated: true,
+        }
+      }, (err, userUpdated) => {
+        if (err) {
+          return reject('Erreur lors de l\'activation de votre compte');
+        }
+
+        return resolve(userUpdated);
       });
     });
   }

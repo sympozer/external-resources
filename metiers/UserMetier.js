@@ -10,12 +10,35 @@ const uuidV1 = require('uuid/v1');
 const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 const VotesMetier = require('../metiers/VotesMetier');
 const TrackRessourceMetier = require('../metiers/TrackRessourceMetier');
+const EmailSender = require('../tools/EmailSender');
 
 class UserMetier {
   constructor() {
     this.userDao = new UserDao();
     this.personRessourceMetier = new PersonRessourceMetier();
     this.votesMetier = new VotesMetier();
+  }
+
+  confirmAccount(email_sha1) {
+    return new Promise((resolve, reject) => {
+      this.userDao.getByEmailSha1(email_sha1)
+        .then((user) => {
+          if (!user) {
+            return reject('Erreur lors de la récupération de votre compte');
+          }
+
+          this.userDao.activeAccount(user.id)
+            .then(() => {
+              return resolve();
+            })
+            .catch((error) => {
+              return reject(error);
+            });
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
   }
 
   /**
@@ -461,7 +484,18 @@ class UserMetier {
                   //Create account
                   this.userDao.add(email, email_sha1, hash, personRessource._id)
                     .then((user) => {
-                      return resolve(user);
+                      //Send an email
+                      const emailSender = new EmailSender();
+                      const html = "<p>Hi, you need to confirm your email to have access to Sympozer External</p>" +
+                        "<p><a href='https://sympozer.com/external/account/confirm/" + email_sha1 + "'>Just click here</a> to confirm it</p>";
+
+                      emailSender.send(email, 'Confirm your email', null, html)
+                        .then((info) => {
+                          return resolve(user);
+                        })
+                        .catch(() => {
+                          return resolve("Your account seems to be created but we can't sent you an email to confirm it");
+                        });
                     })
                     .catch((error) => {
                       return reject(error);

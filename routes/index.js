@@ -87,9 +87,10 @@ router.post('/register', function(req, res, next){
   const userMetier = new UserMetier();
   userMetier.add(email, password, confirmPassword)
     .then(function(user){
-      req.session.user_id = user._id;
+      /*req.session.user_id = user._id;
       req.session.is_admin = false;
-      return res.redirect(req.app.get('baseurl') + "profile");
+      return res.redirect(req.app.get('baseurl') + "profile");*/
+      return res.redirect(req.app.get('baseurl') + "register");
     })
     .catch(function(error){
       return res.redirect(req.app.get('baseurl') + "register");
@@ -103,6 +104,21 @@ router.get('/user/sha1', function(req, res, next){
 
   const userMetier = new UserMetier();
   userMetier.getByEmailSha1(email_sha1, id_ressource)
+    .then(function(user){
+      return res.json(user);
+    })
+    .catch(function(error){
+      return res.json({
+        error: error
+      });
+    });
+});
+
+router.get('/account/confirm/:emailsha', function(req, res, next){
+  const email_sha1 = req.params.email_sha1;
+
+  const userMetier = new UserMetier();
+  userMetier.confirmAccount(email_sha1)
     .then(function(user){
       return res.json(user);
     })

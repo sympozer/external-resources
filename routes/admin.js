@@ -5,7 +5,7 @@ const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 const TrackRessourceMetier = require('../metiers/TrackRessourceMetier');
 const SessionMetier = require('../metiers/SessionMetier');
 
-router.get('/dashboard', function(req, res, next){
+router.get('/dashboard', function (req, res, next) {
   const personRessourceMetier = new PersonRessourceMetier();
   personRessourceMetier.find()
     .then((personsRessources) => {
@@ -16,7 +16,7 @@ router.get('/dashboard', function(req, res, next){
     });
 });
 
-router.post('/manage/ressource/person', function(req, res, next){
+router.post('/manage/ressource/person', function (req, res, next) {
   const id_person_ressource = req.body.id_person_ressource;
   const lastname = req.body.lastname;
   const firstname = req.body.firstname;
@@ -37,7 +37,7 @@ router.post('/manage/ressource/person', function(req, res, next){
     });
 });
 
-router.post('/create/ressource/person', function(req, res, next){
+router.post('/create/ressource/person', function (req, res, next) {
   const id_ressource = req.body.person_id_ressource;
   const personRessourceMetier = new PersonRessourceMetier();
 
@@ -50,7 +50,7 @@ router.post('/create/ressource/person', function(req, res, next){
     });
 });
 
-router.post('/create/ressource/track', function(req, res, next){
+router.post('/create/ressource/track', function (req, res, next) {
   const id_ressource = req.body.track_id_ressource;
   const label = req.body.label;
 
@@ -65,7 +65,7 @@ router.post('/create/ressource/track', function(req, res, next){
     });
 });
 
-router.post('/ressource/track/add/chair', function(req, res, next){
+router.post('/ressource/track/add/chair', function (req, res, next) {
   const id_track = req.body.id_track;
   const email_chair = req.body.email_chair;
 
@@ -80,7 +80,7 @@ router.post('/ressource/track/add/chair', function(req, res, next){
     });
 });
 
-router.get('/ressource/track/:idTrack/remove/chair/:id_user', function(req, res, next){
+router.get('/ressource/track/:idTrack/remove/chair/:id_user', function (req, res, next) {
   const id_track = req.params.idTrack;
   const id_user = req.params.id_user;
 
@@ -91,12 +91,11 @@ router.get('/ressource/track/:idTrack/remove/chair/:id_user', function(req, res,
       return res.render('manage_track', {track: track});
     })
     .catch((error) => {
-      console.log(error);
       return res.redirect(req.app.get('baseurl') + "admin/dashboard");
     });
 });
 
-router.post('/ressource/track/update', function(req, res, next){
+router.post('/ressource/track/update', function (req, res, next) {
   const id_ressource = req.body.id_ressource;
   const label = req.body.label;
   const id_track = req.body.id_track;
@@ -108,7 +107,6 @@ router.post('/ressource/track/update', function(req, res, next){
       return res.render('manage_track', {track: track});
     })
     .catch((error) => {
-      console.log(error);
       return res.redirect(req.app.get('baseurl') + "admin/dashboard");
     });
 });
