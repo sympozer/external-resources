@@ -88,9 +88,10 @@ router.post('/register', function (req, res, next) {
         });
       }
 
-      return res.json(403, {
+      return res.json(204);
+      /*return res.json(204, {
         token: token,
-      });
+      });*/
     })
     .catch(function (error) {
       return res.json(403, {
