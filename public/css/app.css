@@ -1,0 +1,11 @@
+.navbar-brand {
+    height: 90px;
+}
+
+.navbar-brand>img {
+    height: 100%;
+}
+
+.navbar-nav {
+    margin-top: 15px;
+}
