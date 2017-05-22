@@ -98,7 +98,7 @@ class VotesMetier {
         .then((tracksInformationVoted) => {
 
           const tabTracks = [];
-          for(const inf of tracksInformationVoted){
+          for (const inf of tracksInformationVoted) {
             const find = tabTracks.find((t) => {
               return t.id_track === inf;
             });
@@ -108,6 +108,58 @@ class VotesMetier {
         })
         .catch(() => {
           return reject('Erreur lors de la récupération des tracks');
+        });
+    });
+  }
+
+  dashboardVoteAdmin() {
+    return new Promise((resolve, reject) => {
+      //Get all documents vote
+      this.votesDao.getAll()
+        .then((votes) => {
+
+          let tracks = [];
+
+          for (const vote of votes) {
+            //Check if we have the Track
+            const track = tracks.find((t) => {
+              return t.id_track === vote.id_track;
+            });
+
+            //If we don't have the Track, we add it and the ressource
+            if(!track){
+              tracks.push({
+                id_track: vote.id_track,
+                ressources: [{
+                  id_ressource: vote.id_ressource,
+                  nb_vote: 1
+                }],
+              });
+            }
+            else{
+              //Check if we have the ressource
+              const ressource = track.ressources.find((r) => {
+                return r.id_ressource === vote.id_ressource;
+              });
+
+              //If the Track doesn't have the ressource, we add it
+              if(!ressource){
+                track.ressources.push({
+                  id_ressource: vote.id_ressource,
+                  nb_vote: 1
+                });
+              }
+              //Else, we increment the count
+              else{
+                ressource.nb_vote++;
+              }
+            }
+          }
+
+          return resolve(tracks);
+        })
+        .catch((error) => {
+          return reject(error);
         });
     });
   }

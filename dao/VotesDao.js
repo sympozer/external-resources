@@ -85,6 +85,18 @@ class VotesDao {
         });
     });
   }
+
+  getAll(){
+    return new Promise((resolve, reject) => {
+      Votes.find({}, (error, votes) => {
+        if(error){
+          return reject('Error when get votes document');
+        }
+
+        return resolve(votes);
+      });
+    });
+  }
 }
 
 module.exports = VotesDao;

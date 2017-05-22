@@ -4,12 +4,20 @@ const UserMetier = require('../metiers/UserMetier');
 const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 const TrackRessourceMetier = require('../metiers/TrackRessourceMetier');
 const SessionMetier = require('../metiers/SessionMetier');
+const VotesMetier = require('../metiers/VotesMetier');
 
 router.get('/dashboard', function (req, res, next) {
   const personRessourceMetier = new PersonRessourceMetier();
   personRessourceMetier.find()
     .then((personsRessources) => {
-      return res.render('admin_dashboard', {personsRessources: personsRessources});
+      const votesMetier = new VotesMetier();
+    votesMetier.dashboardVoteAdmin()
+      .then((tracks) => {
+        return res.render('admin_dashboard', {personsRessources: personsRessources, tracks: tracks});
+      })
+      .catch((error) => {
+        return res.render('admin_dashboard', {personsRessources: personsRessources});
+      });
     })
     .catch((error) => {
       return res.render('admin_dashboard', {error: error});
