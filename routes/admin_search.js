@@ -10,6 +10,9 @@ router.post('/ressource/person', function (req, res, next) {
   const personRessourceMetier = new PersonRessourceMetier();
   personRessourceMetier.getByIdRessource(id_ressource)
     .then((personRessource) => {
+      if (!personRessource) {
+        return res.redirect(req.app.get('baseurl') + 'admin/dashboard');
+      }
       return res.render('manage_profil_user', {person_ressource: personRessource});
     })
     .catch((error) => {
