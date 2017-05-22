@@ -4,8 +4,8 @@ const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 const TrackRessourceMetier = require('../metiers/TrackRessourceMetier');
 const SessionMetier = require('../metiers/SessionMetier');
 
-router.post('/ressource/person', function (req, res, next) {
-  const id_ressource = req.body.person_id_ressource;
+router.get('/ressource/person', function (req, res, next) {
+  const id_ressource = req.query.id;
 
   const personRessourceMetier = new PersonRessourceMetier();
   personRessourceMetier.getByIdRessource(id_ressource)
