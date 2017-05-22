@@ -29,7 +29,7 @@ class UserMetier {
 
           this.userDao.activeAccount(user.id)
             .then(() => {
-              return resolve();
+              return resolve(user);
             })
             .catch((error) => {
               return reject(error);

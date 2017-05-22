@@ -6,11 +6,15 @@ const SessionMetier = require('../metiers/SessionMetier');
 
 /* Home page. */
 router.get('/', function(req, res, next) {
-  return res.render('index');
+  return res.render('home');
+});
+
+router.get('/login', function(req, res, next) {
+  return res.render('login');
 });
 
 /* Log in => submit form into home page */
-router.post('/', function(req, res, next) {
+router.post('/login', function(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -33,10 +37,10 @@ router.post('/', function(req, res, next) {
         .catch((error) => {
           SessionMetier.destroy(req.session)
             .then(function(){
-              return res.render("index", {error: error});
+              return res.render("login", {error: error});
             })
             .catch(function(){
-              return res.redirect(req.app.get('baseurl'));
+              return res.redirect(req.app.get('baseurl') + "login");
             });
         });
     });
@@ -120,12 +124,12 @@ router.get('/account/confirm/:emailsha', function(req, res, next){
   const userMetier = new UserMetier();
   userMetier.confirmAccount(email_sha1)
     .then(function(user){
-      return res.json(user);
+      req.session.user_id = user._id;
+      req.session.is_admin = false;
+      return res.redirect(req.app.get('baseurl') + "profile");
     })
     .catch(function(error){
-      return res.json({
-        error: error
-      });
+      return res.render("login", {error: error});
     });
 });
 

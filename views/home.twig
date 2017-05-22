@@ -1,0 +1,15 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+    {% if error %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">{{ error }}</div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <p>Some text</p>
+    </div>
+{% endblock %}
