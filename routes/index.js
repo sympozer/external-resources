@@ -115,7 +115,7 @@ router.get('/user/sha1', function(req, res, next){
 });
 
 router.get('/account/confirm/:emailsha', function(req, res, next){
-  const email_sha1 = req.params.email_sha1;
+  const email_sha1 = req.params.emailsha;
 
   const userMetier = new UserMetier();
   userMetier.confirmAccount(email_sha1)
