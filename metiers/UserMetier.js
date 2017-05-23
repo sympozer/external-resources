@@ -4,7 +4,7 @@
 const fs = require('fs');
 const UserDao = require('../dao/UsersDao');
 const validator = require('validator');
-const sha1 = require('sha1');
+const ManagerSha = require('../tools/ManagerSha');
 const Bcrypt = require('../tools/Bcrypt');
 const uuidV1 = require('uuid/v1');
 const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
@@ -462,7 +462,8 @@ class UserMetier {
       }
 
       //Create SHA1 from user email
-      const email_sha1 = sha1(email);
+      const managerSha = new ManagerSha();
+      const email_sha1 = managerSha.encodeEmail(email);
       if (!email_sha1 || email_sha1.length === 0) {
         return reject('Erreur lors du cryptage de votre email');
       }
@@ -741,7 +742,8 @@ class UserMetier {
       }
 
       //Create SHA1 from user email
-      const email_sha1 = sha1(email);
+      const managerSha = new ManagerSha();
+      const email_sha1 = managerSha.encodeEmail(email);
       if (!email_sha1 || email_sha1.length === 0) {
         return reject('Erreur lors du cryptage de votre email');
       }
