@@ -10,7 +10,7 @@ router.get('/vote/information', function(req, res, next){
   const token = req.query.token;
 
   const id_user = JwtMetier.decodeToken(token);
-  console.log(id_user);
+
   if(!id_user){
     return res.json(404, {
       error: "Erreur lors de la récupération de votre identifiant",
@@ -35,5 +35,36 @@ router.get('/vote/information', function(req, res, next){
       });
     });
 });
+
+router.get('', function(req, res, next){
+  const token = req.query.token;
+
+  const id_user = JwtMetier.decodeToken(token);
+
+  if(!id_user){
+    return res.json(404, {
+      error: "Erreur lors de la récupération de votre identifiant",
+    });
+  }
+
+  const userMetier = new UserMetier();
+  userMetier.getPersonRessource(id_user)
+    .then(function(personRessource) {
+      if(personRessource){
+        return res.json(200, personRessource);
+      }
+      else{
+        return res.json(403, {
+          error: "Erreur lors de la récupération des tracks votées",
+        });
+      }
+    })
+    .catch(function(error) {
+      return res.json(403, {
+        error: error
+      });
+    });
+});
+
 
 module.exports = router;
