@@ -189,7 +189,7 @@ class UsersDao {
     return new Promise((resolve, reject) => {
       Users.findOne({
         email: email,
-        activated: true,
+        //activated: true,
       }, (err, user) => {
         if (err) {
           return reject('Erreur lors de la récupération de votre compte');
