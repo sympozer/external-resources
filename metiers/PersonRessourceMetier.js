@@ -114,14 +114,14 @@ class PersonRessourceMetier {
       //Check is homepage is a correct format
       if (homepage && homepage.length > 0) {
         if (!validator.isURL(homepage)) {
-          return reject('L\'url de votre page n\'est pas valide');
+          return reject('Your homepage is not valid');
         }
       }
 
       //Check is photo url is a correct format
       if (photoUrl && photoUrl.length > 0) {
         if (!validator.isURL(photoUrl)) {
-          return reject('L\'url de votre photo n\'est pas valide');
+          return reject('Your photo url is not valid');
         }
       }
 
@@ -129,7 +129,7 @@ class PersonRessourceMetier {
       this.get(id)
         .then((personRessource) => {
           if (!personRessource) {
-            return reject('Erreur lors de la récupération de la ressource');
+            return reject('Cannot get person resource');
           }
 
           //Set new informations
