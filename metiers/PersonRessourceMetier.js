@@ -2,11 +2,13 @@
  * Created by pierremarsot on 27/04/2017.
  */
 const PersonRessourceDao = require('../dao/PersonRessourceDao');
+const UsersDao = require('../dao/UsersDao');
 const validator = require('validator');
 
 class PersonRessourceMetier {
   constructor() {
     this.personRessourceDao = new PersonRessourceDao();
+    this.userDao = new UsersDao();
   }
 
   find() {
@@ -14,6 +16,22 @@ class PersonRessourceMetier {
       this.personRessourceDao.find()
         .then((personsRessources) => {
           return resolve(personsRessources);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  getByIdUser(id_user) {
+    return new Promise((resolve, reject) => {
+      if (!id_user || id_user.length === 0) {
+        return reject('Erreur lors de la récupération de l\'identifiant de l\'user');
+      }
+
+      this.userDao.getIdRessource(id_user)
+        .then((id_ressource) => {
+          return resolve(id_ressource);
         })
         .catch((error) => {
           return reject(error);

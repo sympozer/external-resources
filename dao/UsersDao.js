@@ -313,6 +313,25 @@ class UsersDao {
       });
     });
   }
+
+  getIdRessource(id_user){
+    return new Promise((resolve, reject) => {
+      Users.findOne({
+        _id: id_user,
+      }, (err, user) => {
+        console.log(user);
+        if(err){
+          return reject('Erreur lors de la récupération du compte');
+        }
+
+        if(!user){
+          return reject('Erreur lors de la récupération du compte');
+        }
+
+        return resolve(user.id_person_ressource);
+      });
+    });
+  }
 }
 
 module.exports = UsersDao;
