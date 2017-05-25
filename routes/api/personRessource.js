@@ -12,10 +12,10 @@ router.get('/ressource/person', function (req, res, next) {
   const userMetier = new UserMetier();
   userMetier.getByEmailSha1(email_sha1, id_ressource)
     .then(function (user) {
-      return res.json(user);
+      return res.json(200, user);
     })
     .catch(function (error) {
-      return res.json({
+      return res.json(403, {
         error: error
       });
     });
@@ -30,9 +30,8 @@ router.post('/ressource/person', function (req, res, next) {
   const homepage = req.body.homepage;
   const token = req.body.token;
 
-  console.log(token);
   const id_user = JwtMetier.decodeToken(token);
-  console.log(id_user);
+
   if (!id_user) {
     return res.json(403, {
       error: "Erreur lors de la récupération de votre identifiant",
@@ -44,16 +43,16 @@ router.post('/ressource/person', function (req, res, next) {
     .then((id_ressource) => {
       personRessourceMetier.update(id_ressource, lastname, firstname, twitterpage, '', '', linkedinaccount, homepage, photoUrl)
         .then((personRessource) => {
-          return res.json(personRessource);
+          return res.json(200, personRessource);
         })
         .catch((error) => {
-          return res.json({
+          return res.json(403, {
             error: error
           });
         });
     })
     .catch((error) => {
-      return res.json({
+      return res.json(403, {
         error: error
       });
     });
