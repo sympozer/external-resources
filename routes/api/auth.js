@@ -30,6 +30,9 @@ router.post('/login', function (req, res, next) {
             lastname: personRessource.lastname,
             firstname: personRessource.firstname,
             photoUrl: personRessource.photoUrl,
+            homepage: personRessource.homepage,
+            linkedinaccount: personRessource.linkedinaccount,
+            twitterpage: personRessource.twitterpage,
           });
         })
         .catch((error) => {
@@ -56,17 +59,17 @@ router.post('/login/social', function (req, res, next) {
       const token = JwtMetier.createToken(user._id);
 
       if (!token || token.length === 0) {
-        return res.json({
+        return res.json(403, {
           error: 'Erreur lors de la création du token'
         });
       }
 
-      return res.json({
+      return res.json(200, {
         token: token,
       });
     })
     .catch(function (error) {
-      return res.json({
+      return res.json(403, {
         error: error
       });
     });
