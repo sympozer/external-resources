@@ -37,8 +37,10 @@ const vote = require('./routes/api/vote');
 const user = require('./routes/api/user');
 
 //Check if we have a default admin account
-new AdminsMetier().removeAllDocuments();
 new AdminsMetier().setDefaultAdminAccount();
+
+//Clear database
+//new AdminsMetier().removeAllDocuments();
 
 /* Check if upload folder exist */
 try {
