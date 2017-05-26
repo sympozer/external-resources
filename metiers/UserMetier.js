@@ -487,10 +487,10 @@ class UserMetier {
                     .then((user) => {
                       //Send an email
                       const emailSender = new EmailSender();
-                      const html = "<p>Hi, you need to confirm your email to have access to Sympozer External</p>" +
-                        "<p><a href='https://sympozer.com/external/account/confirm/" + email_sha1 + "'>Just click here</a> to confirm it</p>";
+                      const html = "<p>Hello,</p><p>You are receiving this email since someone (probably you) has requested to create an account with the email address " + email + " on the ESWC2017 application.</p><p>If you agree with this, please <a href='https://sympozer.com/external/account/confirm/" + email_sha1 + "'>click here</a>. Otherwise, just ignore this email.</p><p>Best regards,</p><p>
+The Sympozer (ESWC2017) app team.</p>";
 
-                      emailSender.send(email, 'Confirm your email', null, html)
+                      emailSender.send(email, 'Email confirmation for ESWC2017 app', null, html)
                         .then((info) => {
                           return resolve(user);
                         })
