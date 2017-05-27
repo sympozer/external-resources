@@ -8,9 +8,9 @@ var app = require('../app');
 var debug = require('debug')('express-sympozer:server');
 var http = require('http');
 const mongoose = require('mongoose');
-const persons = require('../namesandemail');
+/*const persons = require('../namesandemail');
 const UserMetier = require('../metiers/UserMetier');
-const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
+const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');*/
 
 const userMetier = new UserMetier();
 const personRessourceMetier = new PersonRessourceMetier();
@@ -55,7 +55,7 @@ mongoose.connect('mongodb://' + hostMongodb + ':' + portMongodb + '/server_sympo
     /**
      * Listen on provided port, on all network interfaces.
      */
-    importData(persons);
+    //importData(persons);
 
     server.listen(portServer);
     console.log('server listning on port : ' + portServer);
