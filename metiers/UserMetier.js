@@ -421,7 +421,7 @@ class UserMetier {
 
           const password = "000000";
 
-          this.add(email, password, password)
+          this.add(email, password, password, false)
             .then((user) => {
               if (!user) {
                 return reject('Erreur lors de la création de la ressource');
@@ -559,7 +559,7 @@ class UserMetier {
                   //Create account
                   this.userDao.add(email, email_sha1, hash, personRessource._id)
                     .then((user) => {
-                      if (!sendEmail || sendEmail === true) {
+                      if (sendEmail === undefined || sendEmail === true) {
                         //Send an email
                         const emailSender = new EmailSender();
                         const html = "<p>Hello,</p><p>You are receiving this email since someone (probably you) has requested to create an account with the email address " + email + " on the ESWC2017 application.</p><p>If you agree with this, please <a href='https://sympozer.com/external/account/confirm/" + email_sha1 + "'>click here</a>. Otherwise, just ignore this email.</p><p>Best regards,</p><p>The Sympozer (ESWC2017) app team.</p>";
