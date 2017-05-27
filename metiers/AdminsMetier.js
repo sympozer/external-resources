@@ -100,22 +100,22 @@ class AdminsMetier {
     });
   }
 
-  setDefaultAdminAccount() {
+  setDefaultAdminAccount(email, password) {
     return new Promise((resolve, reject) => {
-      this.adminsDao.getByEmail(this.defaultEmail)
+      this.adminsDao.getByEmail(email)
         .then((admin) => {
           if (admin) {
             return resolve();
           }
 
           const bcrypt = new Bcrypt();
-          bcrypt.crypt(this.defaultPassword)
+          bcrypt.crypt(password)
             .then((hash) => {
               if (!hash) {
                 return reject();
               }
 
-              this.adminsDao.add(this.defaultEmail, hash)
+              this.adminsDao.add(email, hash)
                 .then(() => {
                   return resolve();
                 })
