@@ -126,7 +126,7 @@ router.get('/account/confirm/:emailsha', function(req, res, next){
     .then(function(user){
       req.session.user_id = user._id;
       req.session.is_admin = false;
-      return res.redirect(req.app.get('baseurl') + "profile");
+      return res.render('account_confirm');
     })
     .catch(function(error){
       return res.render("login", {error: error});
