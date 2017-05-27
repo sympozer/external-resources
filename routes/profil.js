@@ -77,7 +77,7 @@ router.post('/update_password', function (req, res, next) {
       return res.redirect(req.app.get('baseurl') + 'profile');
     })
     .catch(function (error) {
-      return res.redirect(req.app.get('baseurl') + "profile/update_password");
+      return res.redirect(req.app.get('baseurl') + "profile");
     });
 });
 
