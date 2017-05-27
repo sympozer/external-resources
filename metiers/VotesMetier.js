@@ -4,7 +4,6 @@
 const VotesDao = require('../dao/VotesDao');
 const UsersDao = require('../dao/UsersDao');
 const UserAuthorizeToVoteMetier = require('../metiers/UserAuthorizeToVoteMetier');
-const personsAuthorizeToVote = require('../namesandemail');
 
 class VotesMetier {
   constructor() {
@@ -181,23 +180,6 @@ class VotesMetier {
         .catch((error) => {
           return reject(error);
         });
-    });
-  }
-
-  authorizeToVote(user) {
-    return new Promise((resolve, reject) => {
-      for (const p of personsAuthorizeToVote) {
-        const email = p['Email:'];
-        if (!email || email.length === 0) {
-          continue;
-        }
-
-        if (email === user.email) {
-          return resolve(true);
-        }
-      }
-
-      return reject('You are not authorize to vote');
     });
   }
 }
