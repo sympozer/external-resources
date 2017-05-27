@@ -399,7 +399,7 @@ class UserMetier {
       //Get user
       this.userDao.getByEmail(email)
         .then((user) => {
-          if (!user) {
+          if (!user || !user.activated) {
             return reject('Error retrieving your account');
           }
 
