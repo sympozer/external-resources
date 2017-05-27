@@ -53,7 +53,7 @@ class AdminsMetier {
               return resolve(admin);
             })
             .catch(() => {
-              return reject('No account corresponds to this email');
+              return reject('Your password is wrong');
             });
         })
         .catch((error) => {
