@@ -8,12 +8,12 @@ var app = require('../app');
 var debug = require('debug')('express-sympozer:server');
 var http = require('http');
 const mongoose = require('mongoose');
-/*const persons = require('../namesandemail');
+const persons = require('../namesandemail');
 const UserMetier = require('../metiers/UserMetier');
 const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
 
 const userMetier = new UserMetier();
-const personRessourceMetier = new PersonRessourceMetier();*/
+const personRessourceMetier = new PersonRessourceMetier();
 
 let portServer;
 let hostMongodb;
@@ -55,7 +55,7 @@ mongoose.connect('mongodb://' + hostMongodb + ':' + portMongodb + '/server_sympo
     /**
      * Listen on provided port, on all network interfaces.
      */
-    //importData(persons);
+    importData(persons);
 
     server.listen(portServer);
     console.log('server listning on port : ' + portServer);
@@ -147,20 +147,9 @@ function importData(persons) {
   }
 
   //Create user account
-  userMetier.createAccountByAdmin(email)
+  userMetier.removeByEmail(email)
     .then((user) => {
-      if (!user) {
-        return importData(persons);
-      }
-
-      personRessourceMetier.update(user.id_ressource, name, firstname)
-        .then(() => {
-          return importData(persons);
-        })
-        .catch((error) => {
-          console.log(error);
-          return importData(persons);
-        });
+      return importData(persons);
     }).catch((error) => {
     console.log(error);
     return importData(persons);

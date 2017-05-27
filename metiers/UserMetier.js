@@ -43,6 +43,18 @@ class UserMetier {
     });
   }
 
+  removeByEmail(email) {
+    return new Promise((resolve, reject) => {
+      this.userDao.removeByEmail(email)
+        .then(() => {
+          return resolve();
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
   confirmAccount(email_sha1) {
     return new Promise((resolve, reject) => {
       this.userDao.getByEmailSha1(email_sha1)

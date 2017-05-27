@@ -2,10 +2,13 @@
  * Created by pierremarsot on 27/04/2017.
  */
 const VotesDao = require('../dao/VotesDao');
+const UsersDao = require('../dao/UsersDao');
+const personsAuthorizeToVote = require('../namesandemail');
 
 class VotesMetier {
   constructor() {
     this.votesDao = new VotesDao();
+    this.userDao = new UsersDao();
   }
 
   userAlreadyVoted(id_user, id_track) {
@@ -42,19 +45,31 @@ class VotesMetier {
         return reject('Error retrieving track');
       }
 
-      this.userAlreadyVoted(id_user, id_track)
-        .then((alreadyVoted) => {
-          if (alreadyVoted) {
-            return reject('You have already voted');
-          }
+      this.userDao.getById(id_user)
+        .then((user) => {
+          this.authorizeToVote(user)
+            .then(() => {
+              this.userAlreadyVoted(id_user, id_track)
+                .then((alreadyVoted) => {
+                  if (alreadyVoted) {
+                    return reject('You have already voted');
+                  }
 
-          this.votesDao.add(id_user, id_ressource, id_track)
-            .then((vote) => {
-              return resolve(vote);
+                  this.votesDao.add(id_user, id_ressource, id_track)
+                    .then((vote) => {
+                      return resolve(vote);
+                    })
+                    .catch((error) => {
+                      return reject(error);
+                    });
+                })
+                .catch((error) => {
+                  return reject(error);
+                });
             })
             .catch((error) => {
               return reject(error);
-            });
+            })
         })
         .catch((error) => {
           return reject(error);
@@ -127,7 +142,7 @@ class VotesMetier {
             });
 
             //If we don't have the Track, we add it and the ressource
-            if(!track){
+            if (!track) {
               tracks.push({
                 id_track: vote.id_track,
                 ressources: [{
@@ -136,21 +151,21 @@ class VotesMetier {
                 }],
               });
             }
-            else{
+            else {
               //Check if we have the ressource
               const ressource = track.ressources.find((r) => {
                 return r.id_ressource === vote.id_ressource;
               });
 
               //If the Track doesn't have the ressource, we add it
-              if(!ressource){
+              if (!ressource) {
                 track.ressources.push({
                   id_ressource: vote.id_ressource,
                   nb_vote: 1
                 });
               }
               //Else, we increment the count
-              else{
+              else {
                 ressource.nb_vote++;
               }
             }
@@ -161,6 +176,23 @@ class VotesMetier {
         .catch((error) => {
           return reject(error);
         });
+    });
+  }
+
+  authorizeToVote(user) {
+    return new Promise((resolve, reject) => {
+      for (const p of personsAuthorizeToVote) {
+        const email = p['Email:'];
+        if (!email || email.length === 0) {
+          continue;
+        }
+
+        if (email === user.email) {
+          return resolve(true);
+        }
+      }
+
+      return reject('Your not authorize to vote');
     });
   }
 }

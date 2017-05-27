@@ -308,6 +308,23 @@ class UsersDao {
     });
   }
 
+  removeByEmail(email){
+    return new Promise((resolve, reject) => {
+      Users.findOne({email: email}, function (error, person){
+        if(error){
+          return reject('Error while deleting account');
+        }
+
+        if(!person){
+          return reject('Error while deleting account');
+        }
+
+        person.remove();
+        return resolve();
+      });
+    });
+  }
+
   getByEmailAndIdSocialNetwork(email, id_social_network, type_social_network){
     return new Promise((resolve, reject) => {
       Users.findOne({
