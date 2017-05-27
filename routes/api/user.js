@@ -13,7 +13,7 @@ router.get('/vote/information', function(req, res, next){
 
   if(!id_user){
     return res.json(404, {
-      error: "Erreur lors de la récupération de votre identifiant",
+      error: "Error retrieving your id",
     });
   }
 
@@ -25,7 +25,7 @@ router.get('/vote/information', function(req, res, next){
       }
       else{
         return res.json(403, {
-          error: "Erreur lors de la récupération des tracks votées",
+          error: "Error retrieving voted tracks",
         });
       }
     })
@@ -43,7 +43,7 @@ router.get('', function(req, res, next){
 
   if(!id_user){
     return res.json(404, {
-      error: "Erreur lors de la récupération de votre identifiant",
+      error: "Error retrieving your id",
     });
   }
 
@@ -55,7 +55,7 @@ router.get('', function(req, res, next){
       }
       else{
         return res.json(403, {
-          error: "Erreur lors de la récupération des tracks votées",
+          error: "Error retrieving voted tracks",
         });
       }
     })

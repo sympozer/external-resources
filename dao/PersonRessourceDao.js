@@ -12,7 +12,7 @@ class PersonRessourceDao {
     return new Promise((resolve, reject) => {
       PersonRessources.find({}, (error, personsRessources) => {
         if(error){
-          return reject('Erreur lors de la récupération des ressources');
+          return reject('Error recovering resources');
         }
 
         return resolve(personsRessources);
@@ -24,7 +24,7 @@ class PersonRessourceDao {
     return new Promise((resolve, reject) => {
       PersonRessources.findOne({_id: id}, (err, personRessource) => {
         if(err){
-          return reject('Erreur lors de la récupération de la ressource');
+          return reject('Error recovering resource');
         }
 
         return resolve(personRessource);
@@ -36,7 +36,7 @@ class PersonRessourceDao {
     return new Promise((resolve, reject) => {
       PersonRessources.findOne({id_ressource: id}, (err, personRessource) => {
         if(err){
-          return reject('Erreur lors de la récupération de la ressource');
+          return reject('Error recovering resource');
         }
 
         return resolve(personRessource);
@@ -60,7 +60,7 @@ class PersonRessourceDao {
         }
       }, (err, personRessourceUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de vos informations');
+          return reject('Error while editing your information');
         }
 
         return resolve(personRessourceUpdated);
@@ -73,7 +73,7 @@ class PersonRessourceDao {
       const personRessource = new PersonRessources();
       personRessource.save((err) => {
         if(err){
-          return reject('Erreur lors de la création de la ressource');
+          return reject('Error creating resource');
         }
 
         return resolve(personRessource);
@@ -88,7 +88,7 @@ class PersonRessourceDao {
       });
       personRessource.save((err) => {
         if(err){
-          return reject('Erreur lors de la création de la ressource');
+          return reject('Error creating resource');
         }
 
         return resolve(personRessource);
@@ -112,7 +112,7 @@ class PersonRessourceDao {
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de vos informations');
+          return reject('Error while editing your information');
         }
 
         return resolve(userUpdated);
@@ -124,7 +124,7 @@ class PersonRessourceDao {
     return new Promise((resolve, reject) => {
       PersonRessources.findOne({_id: id}, function (error, personRessource){
         if(error){
-          return reject('Erreur lors de la suppression du compte');
+          return reject('Error while deleting account');
         }
 
         personRessource.remove();
@@ -141,7 +141,7 @@ class PersonRessourceDao {
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de vos informations');
+          return reject('Error while editing your information');
         }
 
         return resolve(userUpdated);

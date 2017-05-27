@@ -12,7 +12,7 @@ class TrackRessourceDao {
     return new Promise((resolve, reject) => {
       TrackRessources.findOne({id_ressource: id_ressource}, (err, trackRessource) => {
         if (err) {
-          return reject('Erreur lors de la récupération de la track');
+          return reject('Error retrieving Track');
         }
 
         return resolve(trackRessource);
@@ -24,7 +24,7 @@ class TrackRessourceDao {
     return new Promise((resolve, reject) => {
       TrackRessources.findOne({id_ressource: id_ressource}, (err, trackRessource) => {
         if (err) {
-          return reject('Erreur lors de la récupération de la track');
+          return reject('Error retrieving Track');
         }
 
         return resolve(trackRessource !== undefined);
@@ -36,7 +36,7 @@ class TrackRessourceDao {
     return new Promise((resolve, reject) => {
       TrackRessources.findOne({_id: id}, (err, trackRessource) => {
         if (err) {
-          return reject('Erreur lors de la récupération de la track');
+          return reject('Error retrieving Track');
         }
 
         return resolve(trackRessource);
@@ -52,7 +52,7 @@ class TrackRessourceDao {
       });
       trackRessource.save((err) => {
         if (err) {
-          return reject('Erreur lors de la création de la track');
+          return reject('Error creating Track');
         }
 
         return resolve(trackRessource);
@@ -70,7 +70,7 @@ class TrackRessourceDao {
           }
         }, (err, track) => {
           if (err) {
-            return reject('Erreur lors de l\'ajout du chair');
+            return reject('Error adding Chair');
           }
 
           return resolve(track);
@@ -85,7 +85,7 @@ class TrackRessourceDao {
         {$pull: {'chairs': id_user}},
         (err, track) => {
           if (err) {
-            return reject('Erreur lors de la suppression du chair');
+            return reject('Error deleting Chair');
           }
 
           return resolve(track);
@@ -105,7 +105,7 @@ class TrackRessourceDao {
         },
         (err, track) => {
           if (err) {
-            return reject('Erreur lors de la suppression du chair');
+            return reject('Error deleting Chair');
           }
 
           return resolve(track);
@@ -121,7 +121,7 @@ class TrackRessourceDao {
         }
       }, (error, tracksRessource) => {
         if(error){
-          return reject('Erreur lors de la récupération des tracks autorisés');
+          return reject('Error recovering allowed Tracks');
         }
 
         return resolve(tracksRessource);

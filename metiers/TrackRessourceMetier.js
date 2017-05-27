@@ -13,7 +13,7 @@ class TrackRessourceMetier {
   getByIdRessource(id_ressource) {
     return new Promise((resolve, reject) => {
       if (!id_ressource || id_ressource.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id');
+        return reject('Error retrieving id');
       }
 
       this.trackRessourceDao.getByIdRessource(id_ressource)
@@ -29,7 +29,7 @@ class TrackRessourceMetier {
   existByIdRessource(id_ressource) {
     return new Promise((resolve, reject) => {
       if (!id_ressource || id_ressource.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id');
+        return reject('Error retrieving id');
       }
 
       this.trackRessourceDao.existByIdRessource(id_ressource)
@@ -45,7 +45,7 @@ class TrackRessourceMetier {
   get(id) {
     return new Promise((resolve, reject) => {
       if (!id || id.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id');
+        return reject('Error retrieving id');
       }
 
       this.trackRessourceDao.get(id)
@@ -61,18 +61,18 @@ class TrackRessourceMetier {
   add(id_ressource, label) {
     return new Promise((resolve, reject) => {
       if (!id_ressource || id_ressource.length === 0) {
-        return reject('Erreur lors de la récupération de la ressource');
+        return reject('Error recovering resource');
       }
 
       if (!label || label.length === 0) {
-        return reject('Erreur lors de la récupération du label');
+        return reject('Error recovering the label');
       }
 
       // We check if we don't have already an track ressource with this id ressource
       this.getByIdRessource(id_ressource)
         .then((track) => {
           if (track) {
-            return reject('Une track existe déjà avec cet id');
+            return reject('A track already exists with this id');
           }
 
           this.trackRessourceDao.add(id_ressource, label)
@@ -93,21 +93,21 @@ class TrackRessourceMetier {
 
     return new Promise((resolve, reject) => {
       if (!idTrack || idTrack.length === 0) {
-        return reject('Erreur lors de la récupération de la ressource');
+        return reject('Error recovering resource');
       }
 
       if (!email_user || email_user.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id de la personne');
+        return reject('Error retrieving person id');
       }
 
       if (!validator.isEmail(email_user)) {
-        return reject('L\'email n\'est pas valide');
+        return reject('Email is not valid');
       }
 
       this.get(idTrack)
         .then((track) => {
           if (!track) {
-            return reject('Erreur lors de la récupération de la track');
+            return reject('Error retrieving track');
           }
 
           //Get user
@@ -121,14 +121,14 @@ class TrackRessourceMetier {
                 });
 
                 if (find) {
-                  return reject('Le chair est déjà ajouté à cette track');
+                  return reject('This Chair is already added to this Track');
                 }
               }
 
               this.trackRessourceDao.addChair(idTrack, user._id)
                 .then((track) => {
                   if (!track) {
-                    return reject('Erreur lors de l\'ajout du chair');
+                    return reject('Error adding Chair');
                   }
 
                   track.chairs.push(user._id);
@@ -151,22 +151,22 @@ class TrackRessourceMetier {
   removeChair(idTrack, id_user) {
     return new Promise((resolve, reject) => {
       if (!idTrack || idTrack.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id');
+        return reject('Error retrieving id');
       }
 
       if (!id_user || id_user.length === 0) {
-        return reject('Erreur lors de la récupération de l\'email');
+        return reject('Error retrieving email');
       }
 
       this.get(idTrack)
         .then((track) => {
           if (!track) {
-            return reject('Erreur lors de la récupération de la track');
+            return reject('Error retrieving track');
           }
 
           //We check if the email person is present
           if (!track.chairs || track.chairs.length === 0) {
-            return reject('Aucun chairs dans la track');
+            return reject('No chairs in the track');
           }
 
           const find = track.chairs.find((id) => {
@@ -174,13 +174,13 @@ class TrackRessourceMetier {
           });
 
           if (!find) {
-            return reject('Le chair n\'est pas dans la track');
+            return reject('The Chair is not in this Tracj');
           }
 
           this.trackRessourceDao.removeChair(idTrack, id_user)
             .then((trackUpdated) => {
               if (!trackUpdated || trackUpdated.ok !== 1) {
-                return reject('Erreur lors de la suppression du chair');
+                return reject('Error removing Chair');
               }
 
               //We remove the chair
@@ -202,27 +202,27 @@ class TrackRessourceMetier {
   update(idTrack, id_ressource, label) {
     return new Promise((resolve, reject) => {
       if (!idTrack || idTrack.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id');
+        return reject('Error retrieving id');
       }
 
       if (!id_ressource || id_ressource.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id ressource');
+        return reject('Error retrieving resource id');
       }
 
       if (!label || label.length === 0) {
-        return reject('Erreur lors de la récupération du label');
+        return reject('Error recovering the label');
       }
 
       this.get(idTrack)
         .then((track) => {
           if (!track) {
-            return reject('Erreur lors de la récupération de la track');
+            return reject('Error retrieving track');
           }
 
           this.trackRessourceDao.update(idTrack, id_ressource, label)
             .then((trackUpdated) => {
               if (!trackUpdated || trackUpdated.ok !== 1) {
-                return reject('Erreur lors de la modification de la track');
+                return reject('Error while editing Track');
               }
 
               track.id_ressource = id_ressource;
@@ -243,7 +243,7 @@ class TrackRessourceMetier {
   getAllByIdUser(id_user) {
     return new Promise((resolve, reject) => {
       if (!id_user) {
-        return reject('Erreur lors de la récupération de l\'id de la personne');
+        return reject('Error retrieving person id');
       }
 
       this.trackRessourceDao.getAllTrackByUser(id_user)

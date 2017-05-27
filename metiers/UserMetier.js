@@ -48,7 +48,7 @@ class UserMetier {
       this.userDao.getByEmailSha1(email_sha1)
         .then((user) => {
           if (!user) {
-            return reject('Erreur lors de la récupération de votre compte');
+            return reject('Error retrieving your account');
           }
 
           this.userDao.activeAccount(user.id)
@@ -74,7 +74,7 @@ class UserMetier {
     return new Promise((resolve, reject) => {
       //Check user id
       if (!id) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       //Get user
@@ -105,16 +105,16 @@ class UserMetier {
     return new Promise((resolve, reject) => {
       //Check user id
       if (!id) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       //Check path avatar
       if (!avatar || avatar.length === 0) {
-        return reject('Erreur lors de la récupération de l\'url de votre photo');
+        return reject('Error retrieving the url of your photo');
       }
 
       if (!validator.isURL(avatar)) {
-        return reject('L\'url de votre photo n\'est pas au bon format');
+        return reject('Photo url is not correct');
       }
 
       //Get user
@@ -149,22 +149,22 @@ class UserMetier {
     return new Promise((resolve, reject) => {
       //Check id
       if (!id) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       //Check password
       if (!password || password.length === 0) {
-        return reject('Vous devez spécifier un mot de passe');
+        return reject('You must specify a password');
       }
 
       //Check confirm password
       if (!confirmPassword || confirmPassword.length === 0) {
-        return reject('Vous devez confirmer votre mot de passe');
+        return reject('You must confirm your password');
       }
 
       //Check if password and confirmPassword are the same
       if (confirmPassword !== password) {
-        return reject('Vos mot de passe doivent être identiques');
+        return reject('Your password must be the same');
       }
 
       //Hash password
@@ -181,7 +181,7 @@ class UserMetier {
             });
         })
         .catch(() => {
-          return reject('Erreur lors de la sécurisation de votre mot de passe');
+          return reject('Error securing your password');
         });
     });
   }
@@ -200,48 +200,48 @@ class UserMetier {
 
       //Check if id exist
       if (!id) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       //Check is twitter page is a correct format
       if (twitterpage && twitterpage.length > 0) {
         if (!validator.isURL(twitterpage)) {
-          return reject('L\'url de votre page twitter n\'est pas valide');
+          return reject('The url of your Twitter page is not valid');
         }
       }
 
       //Check is facebook page is a correct format
       if (facebookpage && facebookpage.length > 0) {
         if (!validator.isURL(facebookpage)) {
-          return reject('L\'url de votre page facebook n\'est pas valide');
+          return reject('The url of your Facebook page is not valid');
         }
       }
 
       //Check is google page is a correct format
       if (googleaccount && googleaccount.length > 0) {
         if (!validator.isURL(googleaccount)) {
-          return reject('L\'url de votre page google n\'est pas valide');
+          return reject('The url of your Google page is not valid');
         }
       }
 
       //Check is linkedin page is a correct format
       if (linkedinaccount && linkedinaccount.length > 0) {
         if (!validator.isURL(linkedinaccount)) {
-          return reject('L\'url de votre page linkedin n\'est pas valide');
+          return reject('The url of your Linkedin page is not valid');
         }
       }
 
       //Check is homepage is a correct format
       if (homepage && homepage.length > 0) {
         if (!validator.isURL(homepage)) {
-          return reject('L\'url de votre page n\'est pas valide');
+          return reject('The url of your Homepage is not valid');
         }
       }
 
       //Check is photo url is a correct format
       if (photoUrl && photoUrl.length > 0) {
         if (!validator.isURL(photoUrl)) {
-          return reject('L\'url de votre photo n\'est pas valide');
+          return reject('The url of your photo is not valid');
         }
       }
 
@@ -250,7 +250,7 @@ class UserMetier {
         .then((user) => {
 
           if (!user) {
-            return reject('Erreur lors de la récupération de votre compte');
+            return reject('Error retrieving your account');
           }
 
           this.personRessourceMetier.get(user.id_person_ressource)
@@ -293,14 +293,14 @@ class UserMetier {
     return new Promise((resolve, reject) => {
       //Check id
       if (!id) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       //Get user
       this.userDao.getById(id)
         .then((user) => {
           if (!user) {
-            return reject('Erreur lors de la récupération de votre compte');
+            return reject('Error retrieving your account');
           }
           return resolve(user);
         })
@@ -348,7 +348,7 @@ class UserMetier {
                   });
               }
               else {
-                return reject('Erreur lors de la récupération de votre profil');
+                return reject('Error retrieving your profile');
               }
             })
             .catch((error) => {
@@ -371,24 +371,24 @@ class UserMetier {
     return new Promise((resolve, reject) => {
       //Check email
       if (!email || email.length === 0) {
-        return reject('Vous devez spécifier un mail');
+        return reject('You must specify an email');
       }
 
       //Check if email is a correct format
       if (!validator.isEmail(email)) {
-        return reject('L\'email n\'est pas au bon format');
+        return reject('Your email is not correct');
       }
 
       //Check password
       if (!password || password.length === 0) {
-        return reject('Vous devez spécifier un mot de passe');
+        return reject('You must specify a password');
       }
 
       //Get user
       this.userDao.getByEmail(email)
         .then((user) => {
           if (!user) {
-            return reject('Erreur lors de la récupération de votre compte');
+            return reject('Error retrieving your account');
           }
 
           //Check hash password
@@ -398,7 +398,7 @@ class UserMetier {
               return resolve(user);
             })
             .catch(() => {
-              return reject('Votre mot de passe ne correspond pas');
+              return reject('Your password does not match');
             });
         })
         .catch((error) => {
@@ -410,13 +410,13 @@ class UserMetier {
   createAccountByAdmin(email) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id de la ressource');
+        return reject('Error retrieving the id of the resource');
       }
 
       this.userDao.getByEmailEvenIfNotActivated(email)
         .then((user) => {
           if (user) {
-            return reject('Une ressource existe déjà avec cet id');
+            return reject('A resource already exists with this id');
           }
 
           const password = "000000";
@@ -424,7 +424,7 @@ class UserMetier {
           this.add(email, password, password, false)
             .then((user) => {
               if (!user) {
-                return reject('Erreur lors de la création de la ressource');
+                return reject('Error Creating Resource');
               }
 
               //Activate account
@@ -433,7 +433,7 @@ class UserMetier {
                   this.userDao.setIdRessource(user._id, id_ressource)
                     .then((userUpdated) => {
                       if (!userUpdated) {
-                        return reject('Le compte a bien été créé mais l\'id de la ressource n\'a pas pu être enregistré');
+                        return reject('The account was successfully created but the resource id could not be saved');
                       }
 
                       user.id_ressource = id_ressource;
@@ -460,13 +460,13 @@ class UserMetier {
   addByAdmin(id_ressource) {
     return new Promise((resolve, reject) => {
       if (!id_ressource || id_ressource.length === 0) {
-        return reject('Erreur lors de la récupération de l\'id de la ressource');
+        return reject('Error retrieving the id of the resource');
       }
 
       this.userDao.getByIdRessource(id_ressource)
         .then((user) => {
           if (user) {
-            return reject('Une ressource existe déjà avec cet id');
+            return reject('A resource already exists with this id');
           }
 
           const email = uuidV1() + "@gmail.com";
@@ -475,13 +475,13 @@ class UserMetier {
           this.add(email, password, password)
             .then((user) => {
               if (!user) {
-                return reject('Erreur lors de la création de la ressource');
+                return reject('Error Creating Resource');
               }
 
               this.userDao.setIdRessource(user._id, id_ressource)
                 .then((userUpdated) => {
                   if (!userUpdated) {
-                    return reject('Le compte a bien été créé mais l\'id de la ressource n\'a pas pu être enregistré');
+                    return reject('The account was successfully created but the resource id could not be saved');
                   }
 
                   user.id_ressource = id_ressource;
@@ -512,41 +512,41 @@ class UserMetier {
     return new Promise((resolve, reject) => {
       //Check email
       if (!email || email.length === 0) {
-        return reject('Vous devez spécifier un mail');
+        return reject('You must specify an email');
       }
 
       //Check if email is a correct format
       if (!validator.isEmail(email)) {
-        return reject('Votre email doit être au bon format');
+        return reject('Your email must be in the correct forma');
       }
 
       //Check password
       if (!password || password.length === 0) {
-        return reject('Vous devez spécifier un mot de passe');
+        return reject('You must specify a password');
       }
 
       //Check confirm password
       if (!confirmPassword || confirmPassword.length === 0) {
-        return reject('Vous devez confirmer votre mot de passe');
+        return reject('You must confirm your password');
       }
 
       //Check if password and confirmPassword are the same
       if (confirmPassword !== password) {
-        return reject('Vos mot de passe doivent être identiques');
+        return reject('Your password must be the same');
       }
 
       //Create SHA1 from user email
       const managerSha = new ManagerSha();
       const email_sha1 = managerSha.encodeEmail(email);
       if (!email_sha1 || email_sha1.length === 0) {
-        return reject('Erreur lors du cryptage de votre email');
+        return reject('Error encrypting your email');
       }
 
       //Check if an account have the same email(already exist)
       this.userDao.getByEmail(email)
         .then((user) => {
           if (user) {
-            return reject('Un compte existe déjà avec cet email');
+            return reject('An account already exists with this email');
           }
 
           //Create person ressource
@@ -749,19 +749,19 @@ class UserMetier {
   loginBySocialNetwork(email, id_social_network, type_social_network) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
-        return reject('Erreur lors de la récupération de votre email');
+        return reject('Error retrieving your email');
       }
 
       if (!id_social_network || id_social_network.length === 0) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       if (!validator.isEmail(email)) {
-        return reject('Votre email n\'est pas au bon format');
+        return reject('Your email is not correct');
       }
 
       if (!type_social_network || type_social_network.length === 0) {
-        return reject('Vous devez spécifier un type de reseau social');
+        return reject('You must specify a type of social network');
       }
 
       //We try to get user account
@@ -777,7 +777,7 @@ class UserMetier {
                 this.createAccountBySocialNetwork(email, id_social_network, type_social_network, personRessource._id)
                   .then((user) => {
                     if (!user) {
-                      return reject('Erreur lors de la récupération de votre compte');
+                      return reject('Error retrieving your account');
                     }
 
                     return resolve(user);
@@ -804,44 +804,44 @@ class UserMetier {
   createAccountBySocialNetwork(email, id_social_network, type_social_network, id_person_ressource) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
-        return reject('Erreur lors de la récupération de votre email');
+        return reject('Error retrieving your email');
       }
 
       if (!id_social_network || id_social_network.length === 0) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       if (!id_person_ressource || id_person_ressource.length === 0) {
-        return reject('Erreur lors de la récupération de votre ressource');
+        return reject('Error recovering your resource');
       }
 
       if (!validator.isEmail(email)) {
-        return reject('Votre email n\'est pas au bon format');
+        return reject('Your email is not correct');
       }
 
       //Create SHA1 from user email
       const managerSha = new ManagerSha();
       const email_sha1 = managerSha.encodeEmail(email);
       if (!email_sha1 || email_sha1.length === 0) {
-        return reject('Erreur lors du cryptage de votre email');
+        return reject('Error encrypting your email');
       }
 
       if (!type_social_network || type_social_network.length === 0) {
-        return reject('Vous devez spécifier un type de réseau social');
+        return reject('You must specify a type of social network');
       }
 
       //Check if an account don't exist with this email
       this.userDao.getByEmail(email)
         .then((user) => {
           if (user) {
-            return reject('Un compte existe déjà avec cet email');
+            return reject('An account already exists with this email');
           }
 
           //Create user account
           this.userDao.addBySocialNetwork(email, email_sha1, id_social_network, type_social_network, id_person_ressource)
             .then((user) => {
               if (!user) {
-                return reject('Erreur lors de la création de votre compte');
+                return reject('Error creating your account');
               }
 
               return resolve(user);
@@ -859,7 +859,7 @@ class UserMetier {
   getTrackVotedByUser(id_user) {
     return new Promise((resolve, reject) => {
       if (!id_user || id_user.length === 0) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       this.votesMetier.getTrackVotedByUser(id_user)

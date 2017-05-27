@@ -14,7 +14,7 @@ router.post('/', function(req, res, next){
   const id_user = JwtMetier.decodeToken(token);
   if(!id_user){
     return res.json(403, {
-      error: "Erreur lors de la récupération de votre identifiant",
+      error: "Error retrieving your id",
     });
   }
 
@@ -26,7 +26,7 @@ router.post('/', function(req, res, next){
       }
       else{
         return res.json(403, {
-          error: "Erreur lors de l\'enregistrement de votre vote",
+          error: "Error saving your vote",
         });
       }
     })

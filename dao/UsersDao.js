@@ -16,7 +16,7 @@ class UsersDao {
     return new Promise((resolve, reject) => {
       Users.find({}, (err, users) => {
         if (err) {
-          return reject('Erreur lors de la récupération des users');
+          return reject('Error retrieving users');
         }
 
         return resolve(users);
@@ -33,7 +33,7 @@ class UsersDao {
     return new Promise((resolve, reject) => {
       Users.update({_id: id}, {$unset: {avatar: 1}}, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la suppression de votre photo');
+          return reject('Error while deleting your photo');
         }
 
         return resolve(userUpdated);
@@ -56,7 +56,7 @@ class UsersDao {
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de votre photo');
+          return reject('Error while updating your photo');
         }
 
         return resolve(userUpdated);
@@ -79,7 +79,7 @@ class UsersDao {
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de votre mot de passe');
+          return reject('Error while changing your password');
         }
 
         return resolve(userUpdated);
@@ -108,7 +108,7 @@ class UsersDao {
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de vos informations');
+          return reject('Error while editing your information');
         }
 
         return resolve(userUpdated);
@@ -125,7 +125,7 @@ class UsersDao {
     return new Promise((resolve, reject) => {
       Users.findOne({_id: id}, (err, user) => {
         if (err || !user) {
-          return reject('Erreur lors de la récupération de votre compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user);
@@ -147,7 +147,7 @@ class UsersDao {
       }, (err, user) => {
 
         if (err || !user) {
-          return reject('Erreur lors de la récupération de votre compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user);
@@ -167,7 +167,7 @@ class UsersDao {
       this.getByEmail(email)
         .then((user) => {
           if (user) {
-            return reject('Un compte existe déjà avec cet email');
+            return reject('An account already exists with this email');
           }
 
           user = new Users({
@@ -180,7 +180,7 @@ class UsersDao {
 
           user.save((err) => {
             if (err) {
-              return reject('Erreur lors de la création de votre compte');
+              return reject('Error creating your account');
             }
 
             return resolve(user);
@@ -204,7 +204,7 @@ class UsersDao {
         activated: true,
       }, (err, user) => {
         if (err) {
-          return reject('Erreur lors de la récupération de votre compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user);
@@ -218,7 +218,7 @@ class UsersDao {
         email: email,
       }, (err, user) => {
         if (err) {
-          return reject('Erreur lors de la récupération de votre compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user);
@@ -234,7 +234,7 @@ class UsersDao {
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de l\'activation de votre compte');
+          return reject('Error while activating your account');
         }
 
         return resolve(userUpdated);
@@ -253,7 +253,7 @@ class UsersDao {
         email_sha1: {"$in": email_sha1}
       }, (err, user) => {
         if (err) {
-          return reject('Erreur lors de la récupération de votre compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user);
@@ -267,7 +267,7 @@ class UsersDao {
         id_ressource: id_ressource
       }, (err, user) => {
         if (err) {
-          return reject('Erreur lors de la récupération de votre compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user);
@@ -283,7 +283,7 @@ class UsersDao {
         }
       }, (err, userUpdated) => {
         if (err) {
-          return reject('Erreur lors de la modification de vos informations');
+          return reject('Error while editing your information');
         }
 
         return resolve(userUpdated);
@@ -295,11 +295,11 @@ class UsersDao {
     return new Promise((resolve, reject) => {
       Users.findOne({_id: id}, function (error, person){
         if(error){
-          return reject('Erreur lors de la suppression du compte');
+          return reject('Error while deleting account');
         }
 
         if(!person){
-          return reject('Erreur lors de la suppression du compte');
+          return reject('Error while deleting account');
         }
 
         person.remove();
@@ -316,7 +316,7 @@ class UsersDao {
         type_social_network: type_social_network,
       }, (err, user) => {
         if(err){
-          return reject('Erreur lors de la récupération du compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user);
@@ -336,7 +336,7 @@ class UsersDao {
 
       user.save((err) => {
         if(err){
-          return reject('Erreur lors de la création de votre compte');
+          return reject('Error creating your account');
         }
 
         return resolve(user);
@@ -349,13 +349,12 @@ class UsersDao {
       Users.findOne({
         _id: id_user,
       }, (err, user) => {
-        console.log(user);
         if(err){
-          return reject('Erreur lors de la récupération du compte');
+          return reject('Error retrieving your account');
         }
 
         if(!user){
-          return reject('Erreur lors de la récupération du compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(user.id_person_ressource);

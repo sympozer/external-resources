@@ -18,7 +18,7 @@ router.post('/login', function (req, res, next) {
 
       if (!token || token.length === 0) {
         return res.json(403, {
-          error: 'Erreur lors de la création du token'
+          error: 'Error creating token'
         });
       }
 
@@ -60,7 +60,7 @@ router.post('/login/social', function (req, res, next) {
 
       if (!token || token.length === 0) {
         return res.json(403, {
-          error: 'Erreur lors de la création du token'
+          error: 'Error creating token'
         });
       }
 
@@ -87,7 +87,7 @@ router.post('/register', function (req, res, next) {
 
       if (!token || token.length === 0) {
         return res.json(403, {
-          error: 'Erreur lors de la création du token'
+          error: 'Error creating token'
         });
       }
 

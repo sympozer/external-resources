@@ -24,17 +24,17 @@ class AdminsMetier {
   get(email, password) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
-        return reject('Erreur lors de la récupération de votre email');
+        return reject('Error retrieving your email');
       }
 
       if (!password || password.length === 0) {
-        return reject('Erreur lors de la récupération de votre mot de passe');
+        return reject('Error retrieving your password');
       }
 
       this.adminsDao.getByEmail(email)
         .then((admin) => {
           if (!admin) {
-            return reject('Aucun compte correspond à cet email');
+            return reject('No account corresponds to this email');
           }
 
           //Compare password
@@ -44,7 +44,7 @@ class AdminsMetier {
               return resolve(admin);
             })
             .catch(() => {
-              return reject('Erreur lors de la récupération de votre compte admin');
+              return reject('No account corresponds to this email');
             });
         })
         .catch((error) => {
@@ -56,18 +56,18 @@ class AdminsMetier {
   add(email, password) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
-        return reject('Erreur lors de la récupération de votre email');
+        return reject('Error retrieving your email');
       }
 
       if (!password || password.length === 0) {
-        return reject('Erreur lors de la récupération de votre mot de passe');
+        return reject('Error retrieving your password');
       }
 
       //Check if an account with this email already exist
       this.adminsDao.getByEmail(email)
         .then((admin) => {
           if (admin) {
-            return reject('Un compte existe déjà avec cet email');
+            return reject('An account already exists with this email');
           }
 
           //Hash password
@@ -75,13 +75,13 @@ class AdminsMetier {
           bcrypt.crypt(password)
             .then((hash) => {
               if (!hash || hash.length === 0) {
-                return reject('Erreur lors de la sécurisation de votre mot de passe');
+                return reject('Error securing your password');
               }
 
               this.adminsDao.add(email, hash)
                 .then((admin) => {
                   if (!admin) {
-                    return reject('Erreur lors de la création du compte admin');
+                    return reject('Error creating admin account');
                   }
 
                   return resolve(admin);
@@ -91,7 +91,7 @@ class AdminsMetier {
                 });
             })
             .catch(() => {
-              return reject('Erreur lors de la sécurisation de votre mot de passe');
+              return reject('Error securing your password');
             });
         })
         .catch((error) => {

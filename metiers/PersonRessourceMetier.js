@@ -26,7 +26,7 @@ class PersonRessourceMetier {
   getByIdUser(id_user) {
     return new Promise((resolve, reject) => {
       if (!id_user || id_user.length === 0) {
-        return reject('Erreur lors de la récupération de l\'identifiant de l\'user');
+        return reject('Error retrieving User ID');
       }
 
       this.userDao.getIdRessource(id_user)
@@ -42,13 +42,13 @@ class PersonRessourceMetier {
   get(id) {
     return new Promise((resolve, reject) => {
       if (!id || id.length === 0) {
-        return reject('Erreur lors de la récupération de l\'identifiant de la ressource');
+        return reject('Error retrieving the resource identifier');
       }
 
       this.personRessourceDao.get(id)
         .then((personRessource) => {
           if (!personRessource) {
-            return reject('Erreur lors de la récupération de la ressource');
+            return reject('Error recovering resource');
           }
 
           return resolve(personRessource);
@@ -62,7 +62,7 @@ class PersonRessourceMetier {
   getByIdRessource(id) {
     return new Promise((resolve, reject) => {
       if (!id || id.length === 0) {
-        return reject('Erreur lors de la récupération de l\'identifiant de la ressource');
+        return reject('Error retrieving the resource identifier');
       }
 
       this.personRessourceDao.getByIdRessource(id)
@@ -80,7 +80,7 @@ class PersonRessourceMetier {
 
       //Check if id exist
       if (!id) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       /*//Check is twitter page is a correct format
@@ -162,7 +162,7 @@ class PersonRessourceMetier {
       this.personRessourceDao.createByDefault()
         .then((personRessource) => {
           if (!personRessource) {
-            return reject('Erreur lors de la création de la ressource');
+            return reject('Error Creating Resource');
           }
 
           return resolve(personRessource);
@@ -176,20 +176,20 @@ class PersonRessourceMetier {
   adminCreate(id_ressource) {
     return new Promise((resolve, reject) => {
       if (!id_ressource || id_ressource.length === 0) {
-        return reject('Erreur lors de la récupération de l\'identifiant de la ressource');
+        return reject('Error retrieving the resource identifier');
       }
 
       this.getByIdRessource(id_ressource)
         .then((personRessource) => {
           if (personRessource) {
-            return reject('Une person ressource existe déjà avec cet identifiant');
+            return reject('A resource person already exists with this identifier');
           }
 
           //Check if a person ressource exist with this id
           this.personRessourceDao.adminCreate(id_ressource)
             .then((personRessource) => {
               if (!personRessource) {
-                return reject('Erreur lors de la création de la ressource');
+                return reject('Error Creating Resource');
               }
 
               return resolve(personRessource);

@@ -11,13 +11,13 @@ class SearchPersonMetier {
   getByRessourceId(ressource_id) {
     return new Promise((resolve, reject) => {
       if (!ressource_id || ressource_id.length === 0) {
-        return reject('Erreur lors de la récupération de la ressource id');
+        return reject('Error retrieving resource id');
       }
 
       this.usersDao.getByIdRessource(ressource_id)
         .then((user) => {
           if (!user) {
-            return reject('Aucun compte ne correspond à cet id');
+            return reject('No account matches');
           }
 
           return resolve(user);

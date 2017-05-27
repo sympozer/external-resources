@@ -33,7 +33,7 @@ class VotesDao {
 
       vote.save((err) => {
         if (err) {
-          return reject('Erreur lors de l\'enregistrement de votre vote');
+          return reject('Error saving your vote');
         }
 
         return resolve(vote);
@@ -47,7 +47,7 @@ class VotesDao {
         id_user: id_user
       }, (err, votes) => {
         if (err) {
-          return reject('Erreur lors de la récupération de vos tracks déjà votées')
+          return reject('Error recovering tracks already voted')
         }
 
         return resolve(votes);
@@ -59,7 +59,7 @@ class VotesDao {
     return new Promise((resolve, reject) => {
       Votes.find().distinct('id_track', function (error, ids) {
         if (error) {
-          return reject('Erreur lors de la récupération des tracks');
+          return reject('Error retrieving tracks');
         }
 
         return resolve(ids);

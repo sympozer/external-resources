@@ -11,11 +11,11 @@ class VotesMetier {
   userAlreadyVoted(id_user, id_track) {
     return new Promise((resolve, reject) => {
       if (!id_user) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       if (!id_track) {
-        return reject('Erreur lors de la récupération de la track');
+        return reject('Error retrieving track');
       }
 
       this.votesDao.userAlreadyVoted(id_user, id_track)
@@ -31,21 +31,21 @@ class VotesMetier {
   add(id_user, id_ressource, id_track) {
     return new Promise((resolve, reject) => {
       if (!id_user) {
-        return reject('Erreur lors de la récupération de votre identifiant');
+        return reject('Error retrieving your login');
       }
 
       if (!id_ressource) {
-        return reject('Erreur lors de la récupération de la ressource');
+        return reject('Error recovering resource');
       }
 
       if (!id_track) {
-        return reject('Erreur lors de la récupération de la track');
+        return reject('Error retrieving track');
       }
 
       this.userAlreadyVoted(id_user, id_track)
         .then((alreadyVoted) => {
           if (alreadyVoted) {
-            return reject('Vous avez déjà voté');
+            return reject('You have already voted');
           }
 
           this.votesDao.add(id_user, id_ressource, id_track)
@@ -107,7 +107,7 @@ class VotesMetier {
           return resolve(tracksInformationVoted);
         })
         .catch(() => {
-          return reject('Erreur lors de la récupération des tracks');
+          return reject('Error retrieving tracks');
         });
     });
   }

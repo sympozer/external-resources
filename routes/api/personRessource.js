@@ -34,7 +34,7 @@ router.post('/ressource/person', function (req, res, next) {
 
   if (!id_user) {
     return res.json(403, {
-      error: "Erreur lors de la récupération de votre identifiant",
+      error: "Error retrieving your id",
     });
   }
 

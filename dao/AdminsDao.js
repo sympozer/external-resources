@@ -30,7 +30,7 @@ class AdminsDao {
     return new Promise((resolve, reject) => {
       Admins.findOne({email: email}, function (error, adminAccount) {
         if (error) {
-          return reject('Erreur lors de la suppression du compte');
+          return reject('Error while deleting account');
         }
 
         if(!adminAccount){
@@ -50,7 +50,7 @@ class AdminsDao {
         email: email
       }, (err, admin) => {
         if (err) {
-          return reject('Erreur lors de la récupération de votre compte');
+          return reject('Error retrieving your account');
         }
 
         return resolve(admin);
@@ -67,7 +67,7 @@ class AdminsDao {
 
       admin.save((err) => {
         if (err) {
-          return reject('Erreur lors de la création de votre compte');
+          return reject('Error creating your account');
         }
 
         return resolve(admin);
