@@ -192,7 +192,7 @@ class VotesMetier {
         }
       }
 
-      return reject('Your not authorize to vote');
+      return reject('You are not authorize to vote');
     });
   }
 }
