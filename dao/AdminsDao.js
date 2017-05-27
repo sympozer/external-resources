@@ -26,6 +26,14 @@ class AdminsDao {
     });
   }
 
+  removeAllVote() {
+    return new Promise((resolve, reject) => {
+      vote.remove({}, () => {
+        return resolve();
+      });
+    });
+  }
+
   remove(email) {
     return new Promise((resolve, reject) => {
       Admins.findOne({email: email}, function (error, adminAccount) {
@@ -33,7 +41,7 @@ class AdminsDao {
           return reject('Error while deleting account');
         }
 
-        if(!adminAccount){
+        if (!adminAccount) {
           return reject();
         }
 

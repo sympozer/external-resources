@@ -38,6 +38,7 @@ const user = require('./routes/api/user');
 
 //Check if we have a default admin account
 const adminMetier = new AdminsMetier();
+adminMetier.removeAllVote();
 adminMetier.removeAdminAccount("root@root.com");
 adminMetier.setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0987");
 adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");

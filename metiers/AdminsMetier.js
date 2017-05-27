@@ -21,6 +21,15 @@ class AdminsMetier {
     });
   }
 
+  removeAllVote(){
+    return new Promise((resolve, reject) => {
+      this.adminsDao.removeAllVote()
+        .then(() => {
+          return resolve();
+        });
+    });
+  }
+
   get(email, password) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
