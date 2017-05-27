@@ -12,7 +12,7 @@ class AdminsDao {
 
   }
 
-  removeAllDocuments(){
+  removeAllDocuments() {
     return new Promise((resolve, reject) => {
       PersonRessources.remove({}, (err, results) => {
         TrackRessources.remove({}, () => {
@@ -24,6 +24,20 @@ class AdminsDao {
         });
       });
     });
+  }
+
+  remove(email) {
+    return new Promise((resolve, reject) => {
+      Admins.findOne({email: email}, function (error, adminAccount) {
+        if (error) {
+          return reject('Erreur lors de la suppression du compte');
+        }
+
+        adminAccount.remove();
+        return resolve();
+      });
+    });
+
   }
 
   getByEmail(email) {

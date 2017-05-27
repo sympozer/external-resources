@@ -37,8 +37,10 @@ const vote = require('./routes/api/vote');
 const user = require('./routes/api/user');
 
 //Check if we have a default admin account
-new AdminsMetier().setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0987");
-new AdminsMetier().setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");
+const adminMetier = new AdminsMetier();
+adminMetier.removeAdminAccount("root@root.com");
+adminMetier.setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0987");
+adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");
 
 //Clear database
 //new AdminsMetier().removeAllDocuments();

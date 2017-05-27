@@ -12,7 +12,7 @@ class AdminsMetier {
     this.defaultPassword = 'root';
   }
 
-  removeAllDocuments(){
+  removeAllDocuments() {
     return new Promise((resolve, reject) => {
       this.adminsDao.removeAllDocuments()
         .then(() => {
@@ -96,6 +96,17 @@ class AdminsMetier {
         })
         .catch((error) => {
           return reject(error);
+        });
+    });
+  }
+
+  removeAdminAccount(email) {
+    return new Promise((resolve, reject) => {
+      this.adminsDao.remove(email).then(() => {
+        return resolve();
+      })
+        .catch(() => {
+          return reject();
         });
     });
   }
