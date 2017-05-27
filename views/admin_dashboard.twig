@@ -124,6 +124,7 @@
                         <th>Id Ressource</th>
                         <th>Lastname</th>
                         <th>Firstname</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -161,6 +162,11 @@
                                         {{ personRessource.firstname }}
                                     </a>
                                 {% endif %}
+                            </td>
+                            <td>
+                                <a href="admin/remove/personResource/{{ personRessource._id }}" role="button" class="btn btn-danger">
+                                    Remove
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

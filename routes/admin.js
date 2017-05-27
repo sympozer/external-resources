@@ -156,4 +156,17 @@ router.get('/remove/user/:id', function (req, res, next) {
     });
 });
 
+router.get('/remove/personResource/:id', function (req, res, next) {
+  const id_person_resource = req.params.id;
+
+  const personRessourceMetier = new PersonRessourceMetier();
+  personRessourceMetier.remove(id_person_resource)
+    .then(() => {
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
+    })
+    .catch((error) => {
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
+    });
+});
+
 module.exports = router;

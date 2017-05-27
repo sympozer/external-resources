@@ -127,6 +127,10 @@ class PersonRessourceDao {
           return reject('Error while deleting account');
         }
 
+        if(!personRessource){
+          return reject('Error while deleting account');
+        }
+
         personRessource.remove();
         return resolve();
       });
