@@ -14,5 +14,5 @@ const UsersAuthorizeToVoteSchema = new mongoose.Schema({
 UsersAuthorizeToVoteSchema.plugin(mongooseApiQuery);
 UsersAuthorizeToVoteSchema.plugin(createdModified, { index: true });
 
-const UsersAuthorizeToVote = mongoose.model('Users', UsersAuthorizeToVoteSchema);
+const UsersAuthorizeToVote = mongoose.model('UsersAuthorizeToVote', UsersAuthorizeToVoteSchema);
 module.exports = UsersAuthorizeToVote;
