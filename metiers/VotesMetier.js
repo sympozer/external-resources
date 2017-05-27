@@ -3,12 +3,14 @@
  */
 const VotesDao = require('../dao/VotesDao');
 const UsersDao = require('../dao/UsersDao');
+const UserAuthorizeToVoteMetier = require('../metiers/UserAuthorizeToVoteMetier');
 const personsAuthorizeToVote = require('../namesandemail');
 
 class VotesMetier {
   constructor() {
     this.votesDao = new VotesDao();
     this.userDao = new UsersDao();
+    this.userAuthorizeToVoteMetier = new UserAuthorizeToVoteMetier();
   }
 
   userAlreadyVoted(id_user, id_track) {
@@ -47,8 +49,11 @@ class VotesMetier {
 
       this.userDao.getById(id_user)
         .then((user) => {
-          this.authorizeToVote(user)
-            .then(() => {
+          this.userAuthorizeToVoteMetier.get(user.email)
+            .then((userAuthorizeToVite) => {
+              if (!userAuthorizeToVite) {
+                return reject('You are not authorize to vote');
+              }
               this.userAlreadyVoted(id_user, id_track)
                 .then((alreadyVoted) => {
                   if (alreadyVoted) {

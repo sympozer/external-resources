@@ -10,10 +10,10 @@ var http = require('http');
 const mongoose = require('mongoose');
 const persons = require('../namesandemail');
 const UserMetier = require('../metiers/UserMetier');
-const PersonRessourceMetier = require('../metiers/PersonRessourceMetier');
+const UserAuthorizeToVoteMetier = require('../metiers/UserAuthorizeToVoteMetier');
 
 const userMetier = new UserMetier();
-const personRessourceMetier = new PersonRessourceMetier();
+const userAuthorizeToVoteMetier = new UserAuthorizeToVoteMetier();
 
 let portServer;
 let hostMongodb;
@@ -147,9 +147,18 @@ function importData(persons) {
   }
 
   //Create user account
-  userMetier.removeByEmail(email)
-    .then((user) => {
-      return importData(persons);
+  userAuthorizeToVoteMetier.get(email)
+    .then((userAuthorizeToVote) => {
+      if (userAuthorizeToVote) {
+        return importData(persons);
+      }
+      userAuthorizeToVoteMetier.add(email)
+        .then(() => {
+          return importData(persons);
+        })
+        .catch(() => {
+          return importData(persons);
+        });
     }).catch((error) => {
     console.log(error);
     return importData(persons);
