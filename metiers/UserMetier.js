@@ -383,6 +383,56 @@ class UserMetier {
     });
   }
 
+  createAccountByAdmin(email) {
+    return new Promise((resolve, reject) => {
+      if (!email || email.length === 0) {
+        return reject('Erreur lors de la récupération de l\'id de la ressource');
+      }
+
+      this.userDao.getByEmailEvenIfNotActivated(email)
+        .then((user) => {
+          if (user) {
+            return reject('Une ressource existe déjà avec cet id');
+          }
+
+          const password = "000000";
+
+          this.add(email, password, password)
+            .then((user) => {
+              if (!user) {
+                return reject('Erreur lors de la création de la ressource');
+              }
+
+              //Activate account
+              this.userDao.activeAccount(user._id)
+                .then(() => {
+                  this.userDao.setIdRessource(user._id, id_ressource)
+                    .then((userUpdated) => {
+                      if (!userUpdated) {
+                        return reject('Le compte a bien été créé mais l\'id de la ressource n\'a pas pu être enregistré');
+                      }
+
+                      user.id_ressource = id_ressource;
+                      return resolve(user);
+                    })
+                    .catch((error) => {
+                      return reject(error);
+                    });
+                })
+                .catch((error) => {
+                  return reject(error);
+                });
+            })
+            .catch((error) => {
+              return reject(error);
+            });
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
   addByAdmin(id_ressource) {
     return new Promise((resolve, reject) => {
       if (!id_ressource || id_ressource.length === 0) {
@@ -434,7 +484,7 @@ class UserMetier {
    * @param confirmPassword - user confirm password
    * @returns {Promise}
    */
-  add(email, password, confirmPassword) {
+  add(email, password, confirmPassword, sendEmail) {
     return new Promise((resolve, reject) => {
       //Check email
       if (!email || email.length === 0) {
@@ -485,17 +535,22 @@ class UserMetier {
                   //Create account
                   this.userDao.add(email, email_sha1, hash, personRessource._id)
                     .then((user) => {
-                      //Send an email
-                      const emailSender = new EmailSender();
-                      const html = "<p>Hello,</p><p>You are receiving this email since someone (probably you) has requested to create an account with the email address " + email + " on the ESWC2017 application.</p><p>If you agree with this, please <a href='https://sympozer.com/external/account/confirm/" + email_sha1 + "'>click here</a>. Otherwise, just ignore this email.</p><p>Best regards,</p><p>The Sympozer (ESWC2017) app team.</p>";
+                      if (!sendEmail || sendEmail === true) {
+                        //Send an email
+                        const emailSender = new EmailSender();
+                        const html = "<p>Hello,</p><p>You are receiving this email since someone (probably you) has requested to create an account with the email address " + email + " on the ESWC2017 application.</p><p>If you agree with this, please <a href='https://localhost:3000/account/confirm/" + email_sha1 + "'>click here</a>. Otherwise, just ignore this email.</p><p>Best regards,</p><p>The Sympozer (ESWC2017) app team.</p>";
 
-                      emailSender.send(email, 'Email confirmation for ESWC2017 app', null, html)
-                        .then((info) => {
-                          return resolve(user);
-                        })
-                        .catch(() => {
-                          return resolve("Your account seems to be created but we can't sent you an email to confirm it");
-                        });
+                        emailSender.send(email, 'Email confirmation for ESWC2017 app', null, html)
+                          .then((info) => {
+                            return resolve(user);
+                          })
+                          .catch(() => {
+                            return resolve("Your account seems to be created but we can't sent you an email to confirm it");
+                          });
+                      }
+                      else {
+                        return resolve(user);
+                      }
                     })
                     .catch((error) => {
                       return reject(error);

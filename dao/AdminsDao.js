@@ -33,6 +33,10 @@ class AdminsDao {
           return reject('Erreur lors de la suppression du compte');
         }
 
+        if(!adminAccount){
+          return reject();
+        }
+
         adminAccount.remove();
         return resolve();
       });

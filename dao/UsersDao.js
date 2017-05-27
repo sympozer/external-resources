@@ -200,6 +200,20 @@ class UsersDao {
     });
   }
 
+  getByEmailEvenIfNotActivated(email) {
+    return new Promise((resolve, reject) => {
+      Users.findOne({
+        email: email,
+      }, (err, user) => {
+        if (err) {
+          return reject('Erreur lors de la récupération de votre compte');
+        }
+
+        return resolve(user);
+      });
+    });
+  }
+
   activeAccount(id){
     return new Promise((resolve, reject) => {
       Users.update({_id: id}, {

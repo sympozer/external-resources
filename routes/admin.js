@@ -119,4 +119,17 @@ router.post('/ressource/track/update', function (req, res, next) {
     });
 });
 
+router.post('/create/user', function (req, res, next) {
+  const user_email = req.body.user_email;
+
+  const userMetier = new UserMetier();
+  userMetier.createAccountByAdmin(user_email)
+    .then((personRessource) => {
+      return res.render('manage_profil_user', {person_ressource: personRessource});
+    })
+    .catch((error) => {
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
+    });
+});
+
 module.exports = router;

@@ -92,6 +92,20 @@
                     </form>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Create User Account</h1>
+                    <form method="POST" action="admin/create/user">
+                        <div class="form-group">
+                            <label for="track-id-ressource">User Email</label>
+                            <input type="email" class="form-control" id="user_email"
+                                   placeholder="User email"
+                                   name="user_email">
+                        </div>
+                        <button type="submit" class="btn btn-success">Create</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
 
@@ -115,31 +129,32 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="admin/search/ressource/person?id={{ personRessource.id_ressource }}">
-                                    {% if not personRessource.id_ressource or personRessource.id_ressource is empty %}
-                                        <span class="text-info">Not specified</span>
-                                    {% else %}
+                                {% if not personRessource.id_ressource or personRessource.id_ressource is empty %}
+                                    <span class="text-info">Not specified</span>
+                                {% else %}
+                                    <a href="admin/search/ressource/person?id={{ personRessource.id_ressource }}">
                                         {{ personRessource.id_ressource }}
-                                    {% endif %}
-                                </a>
+                                    </a>
+                                {% endif %}
                             </td>
                             <td>
-                                <a href="admin/search/ressource/person?id={{ personRessource.id_ressource }}">
-                                    {% if not personRessource.lastname or personRessource.lastname is empty %}
-                                        <span class="text-info">Not specified</span>
-                                    {% else %}
+
+                                {% if not personRessource.lastname or personRessource.lastname is empty %}
+                                    <span class="text-info">Not specified</span>
+                                {% else %}
+                                    <a href="admin/search/ressource/person?id={{ personRessource.id_ressource }}">
                                         {{ personRessource.lastname }}
-                                    {% endif %}
-                                </a>
+                                    </a>
+                                {% endif %}
                             </td>
                             <td>
-                                <a href="admin/search/ressource/person?id={{ personRessource.id_ressource }}">
-                                    {% if not personRessource.firstname or personRessource.firstname is empty %}
-                                        <span class="text-info">Not specified</span>
-                                    {% else %}
+                                {% if not personRessource.firstname or personRessource.firstname is empty %}
+                                    <span class="text-info">Not specified</span>
+                                {% else %}
+                                    <a href="admin/search/ressource/person?id={{ personRessource.id_ressource }}">
                                         {{ personRessource.firstname }}
-                                    {% endif %}
-                                </a>
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -155,12 +170,14 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
                                 <h4 class="panel-title">
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{{ loop.index }}" aria-expanded="true" aria-controls="collapseOne">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                       href="#{{ loop.index }}" aria-expanded="true" aria-controls="collapseOne">
                                         {{ track.id_track }}
                                     </a>
                                 </h4>
                             </div>
-                            <div id="{{ loop.index }}" class="panel-collapse collapse {{ loop.index == 1 ? 'in' : '' }}" role="tabpanel" aria-labelledby="headingOne">
+                            <div id="{{ loop.index }}" class="panel-collapse collapse {{ loop.index == 1 ? 'in' : '' }}"
+                                 role="tabpanel" aria-labelledby="headingOne">
                                 <div class="panel-body">
                                     <table class="table">
                                         <thead>
