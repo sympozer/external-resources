@@ -26,6 +26,12 @@
                     Vote</a>
             </li>
         {% endif %}
+        {% if users and users.length > 0 %}
+            <li role="presentation">
+                <a href="#usersAccount" aria-controls="showpersonressource" role="tab" data-toggle="tab">
+                    Users Account</a>
+            </li>
+        {% endif %}
     </ul>
 
     <!-- Tab panes -->
@@ -207,6 +213,38 @@
                             </div>
                         </div>
                     {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        {% if users and users.length > 0 %}
+            <div role="tabpanel" class="tab-pane" id="usersAccount">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User email</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td scope="row">
+                                    {{ loop.index }}
+                                </td>
+                                <td>
+                                    {{ user.email }}
+                                </td>
+                                <td>
+                                    <a href="admin/remove/user/{{ user._id }}" role="button" class="btn btn-danger">
+                                        Remove
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         {% endif %}

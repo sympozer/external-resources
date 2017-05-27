@@ -19,6 +19,30 @@ class UserMetier {
     this.votesMetier = new VotesMetier();
   }
 
+  find() {
+    return new Promise((resolve, reject) => {
+      this.userDao.find()
+        .then((users) => {
+          return resolve(users);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
+  removeById(id) {
+    return new Promise((resolve, reject) => {
+      this.userDao.remove(id)
+        .then(() => {
+          return resolve();
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
   confirmAccount(email_sha1) {
     return new Promise((resolve, reject) => {
       this.userDao.getByEmailSha1(email_sha1)

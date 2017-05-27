@@ -11,13 +11,24 @@ router.get('/dashboard', function (req, res, next) {
   personRessourceMetier.find()
     .then((personsRessources) => {
       const votesMetier = new VotesMetier();
-    votesMetier.dashboardVoteAdmin()
-      .then((tracks) => {
-        return res.render('admin_dashboard', {personsRessources: personsRessources, tracks: tracks});
-      })
-      .catch((error) => {
-        return res.render('admin_dashboard', {personsRessources: personsRessources});
-      });
+      votesMetier.dashboardVoteAdmin()
+        .then((tracks) => {
+          const userMetier = new UserMetier();
+          userMetier.find()
+            .then((users) => {
+              return res.render('admin_dashboard', {
+                personsRessources: personsRessources,
+                tracks: tracks,
+                users: users
+              });
+            })
+            .catch((error) => {
+              return res.render('admin_dashboard', {error: error});
+            });
+        })
+        .catch((error) => {
+          return res.render('admin_dashboard', {personsRessources: personsRessources});
+        });
     })
     .catch((error) => {
       return res.render('admin_dashboard', {error: error});
@@ -126,6 +137,19 @@ router.post('/create/user', function (req, res, next) {
   userMetier.createAccountByAdmin(user_email)
     .then((personRessource) => {
       return res.render('manage_profil_user', {person_ressource: personRessource});
+    })
+    .catch((error) => {
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
+    });
+});
+
+router.get('/remove/user/:id', function (req, res, next) {
+  const id_user = req.params.id;
+
+  const userMetier = new UserMetier();
+  userMetier.removeById(id_user)
+    .then(() => {
+      return res.redirect(req.app.get('baseurl') + "admin/dashboard");
     })
     .catch((error) => {
       return res.redirect(req.app.get('baseurl') + "admin/dashboard");

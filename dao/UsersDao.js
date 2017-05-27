@@ -12,6 +12,18 @@ class UsersDao {
 
   }
 
+  find(){
+    return new Promise((resolve, reject) => {
+      Users.find({}, (err, users) => {
+        if (err) {
+          return reject('Erreur lors de la récupération des users');
+        }
+
+        return resolve(users);
+      });
+    });
+  }
+
   /**
    * Remove user avatar
    * @param id - user id
@@ -283,6 +295,10 @@ class UsersDao {
     return new Promise((resolve, reject) => {
       Users.findOne({_id: id}, function (error, person){
         if(error){
+          return reject('Erreur lors de la suppression du compte');
+        }
+
+        if(!person){
           return reject('Erreur lors de la suppression du compte');
         }
 
