@@ -40,8 +40,8 @@ const user = require('./routes/api/user');
 
 //Check if we have a default admin account
 const adminMetier = new AdminsMetier();
-const userMetier = new UserMetier();
-const votesMetier = new VotesMetier();
+/*const userMetier = new UserMetier();
+const votesMetier = new VotesMetier();*/
 
 adminMetier.removeAllVote();
 adminMetier.removeAdminAccount("root@root.com");
@@ -49,14 +49,14 @@ adminMetier.setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0
 adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");
 
 //remove vote medini
-userMetier.getByEmail("lionel.medini@univ-lyon1.fr")
+/*userMetier.getByEmail("lionel.medini@univ-lyon1.fr")
   .then((mediniUser) => {
     if (!mediniUser) {
       return false;
     }
 
     votesMetier.removeAllByIdUser(mediniUser._id);
-  });
+  });*/
 
 //Clear database
 //new AdminsMetier().removeAllDocuments();
