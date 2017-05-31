@@ -202,7 +202,9 @@
                                                     {{ loop.index }}
                                                 </td>
                                                 <td>
-                                                    {{ ressource.id_ressource }}
+                                                    <a target="_blank" href="http://sympozer.liris.cnrs.fr/eswc2017/#/publication/A/{{ ressource.id_ressource|url_encode }}">
+                                                        {{ ressource.id_ressource }}
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     {{ ressource.nb_vote }}
