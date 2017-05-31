@@ -12,7 +12,7 @@ class VotesDao {
     return new Promise((resolve, reject) => {
       Votes.remove({id_user: id_user}, function (error, votes) {
         if (error) {
-          return reject('Error while deleting account');
+          return reject('Error while deleting votes');
         }
 
         if (!votes) {

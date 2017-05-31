@@ -43,7 +43,7 @@ const adminMetier = new AdminsMetier();
 const userMetier = new UserMetier();
 const votesMetier = new VotesMetier();
 
-//adminMetier.removeAllVote();
+adminMetier.removeAllVote();
 adminMetier.removeAdminAccount("root@root.com");
 adminMetier.setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0987");
 adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");
