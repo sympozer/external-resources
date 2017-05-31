@@ -14,24 +14,19 @@
         <li role="presentation" class="active">
             <a href="#manage-ressource" aria-controls="profile" role="tab" data-toggle="tab">Manage ressource</a>
         </li>
-        {% if personsRessources and personsRessources.length > 0 %}
-            <li role="presentation">
-                <a href="#show-person-ressource" aria-controls="showpersonressource" role="tab" data-toggle="tab">
-                    Person ressource</a>
-            </li>
-        {% endif %}
-        {% if tracks and tracks.length > 0 %}
-            <li role="presentation">
-                <a href="#vote" aria-controls="showpersonressource" role="tab" data-toggle="tab">
-                    Vote</a>
-            </li>
-        {% endif %}
-        {% if users and users.length > 0 %}
-            <li role="presentation">
-                <a href="#usersAccount" aria-controls="showpersonressource" role="tab" data-toggle="tab">
-                    User Account</a>
-            </li>
-        {% endif %}
+        <li role="presentation">
+            <a href="#show-person-ressource" aria-controls="showpersonressource" role="tab" data-toggle="tab">
+                Person ressource</a>
+        </li>
+
+        <li role="presentation">
+            <a href="#vote" aria-controls="showpersonressource" role="tab" data-toggle="tab">
+                Vote</a>
+        </li>
+        <li role="presentation">
+            <a href="#usersAccount" aria-controls="showpersonressource" role="tab" data-toggle="tab">
+                User Account</a>
+        </li>
     </ul>
 
     <!-- Tab panes -->
@@ -164,7 +159,8 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="admin/remove/personResource/{{ personRessource._id }}" role="button" class="btn btn-danger">
+                                <a href="admin/remove/personResource/{{ personRessource._id }}" role="button"
+                                   class="btn btn-danger">
                                     Remove
                                 </a>
                             </td>
