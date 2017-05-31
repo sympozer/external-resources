@@ -8,6 +8,22 @@ class VotesDao {
 
   }
 
+  removeAllByIdUser(id_user){
+    return new Promise((resolve, reject) => {
+      Votes.remove({id_user: id_user}, function (error, votes) {
+        if (error) {
+          return reject('Error while deleting account');
+        }
+
+        if (!votes) {
+          return reject();
+        }
+
+        return resolve();
+      });
+    });
+  }
+
   userAlreadyVoted(id_user, id_track) {
     return new Promise((resolve, reject) => {
       Votes.count({

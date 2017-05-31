@@ -12,6 +12,18 @@ class VotesMetier {
     this.userAuthorizeToVoteMetier = new UserAuthorizeToVoteMetier();
   }
 
+  removeAllByIdUser(id_user) {
+    return new Promise((resolve, reject) => {
+      this.votesDao.removeAllByIdUser(id_user)
+        .then(() => {
+          return resolve();
+        })
+        .catch((error) => {
+          return reject(error);
+        })
+    });
+  }
+
   userAlreadyVoted(id_user, id_track) {
     return new Promise((resolve, reject) => {
       if (!id_user) {

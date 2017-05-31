@@ -9,18 +9,20 @@ const session = require('express-session');
 const cors = require('cors');
 const AdminsMetier = require('./metiers/AdminsMetier');
 const SessionMetier = require('./metiers/SessionMetier');
+const UserMetier = require('./metiers/UserMetier');
+const VotesMetier = require('./metiers/VotesMetier');
 
 const app = express();
 
 let baseUrl = '/';
-if(app.get('env') === "production"){
+if (app.get('env') === "production") {
   baseUrl = '/external/';
 }
 
 console.log(baseUrl);
 
 //Middleware baseurl
-app.use(function(req,res,next){
+app.use(function (req, res, next) {
   res.locals.baseurl = baseUrl;
   return next();
 });
@@ -38,10 +40,23 @@ const user = require('./routes/api/user');
 
 //Check if we have a default admin account
 const adminMetier = new AdminsMetier();
+const userMetier = new UserMetier();
+const votesMetier = new VotesMetier();
+
 //adminMetier.removeAllVote();
 adminMetier.removeAdminAccount("root@root.com");
 adminMetier.setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0987");
 adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");
+
+//remove vote medini
+userMetier.getByEmail("lionel.medini@univ-lyon1.fr")
+  .then((mediniUser) => {
+    if (!mediniUser) {
+      return false;
+    }
+
+    votesMetier.removeAllByIdUser(mediniUser._id);
+  });
 
 //Clear database
 //new AdminsMetier().removeAllDocuments();
@@ -49,7 +64,7 @@ adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot098
 /* Check if upload folder exist */
 try {
   fs.statSync("./public/uploads");
-} catch(e) {
+} catch (e) {
   fs.mkdirSync("./public/uploads");
 }
 
@@ -57,19 +72,19 @@ try {
 app.use(session({secret: 'ssshhhhh', resave: true, saveUninitialized: true}));
 
 //Middleware session
-app.use(function(req,res,next){
+app.use(function (req, res, next) {
   res.locals.session = req.session;
   return next();
 });
 
 /* Middleware to check if user can access to profile page */
-app.all('(/profile/*)|(/profile)', function(req,res,next){
-  if(!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== false){
+app.all('(/profile/*)|(/profile)', function (req, res, next) {
+  if (!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== false) {
     SessionMetier.destroy(req.session)
-      .then(function(){
+      .then(function () {
         return res.redirect(req.app.get('baseurl'));
       })
-      .catch(function(){
+      .catch(function () {
         return res.redirect(req.app.get('baseurl'));
       });
   }
@@ -79,17 +94,17 @@ app.all('(/profile/*)|(/profile)', function(req,res,next){
 });
 
 /* Middleware to check if user can access to admin page */
-app.all('(/admin/*)|(/admin)', function(req,res,next){
-  if(!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== true){
+app.all('(/admin/*)|(/admin)', function (req, res, next) {
+  if (!req.session.user_id || req.session.is_admin === undefined || req.session.is_admin !== true) {
     SessionMetier.destroy(req.session)
-      .then(function(){
+      .then(function () {
         return res.redirect(req.app.get('baseurl'));
       })
-      .catch(function(){
+      .catch(function () {
         return res.redirect(req.app.get('baseurl'));
       });
   }
-  else{
+  else {
     return next();
   }
 });
@@ -105,7 +120,7 @@ app.set('view engine', 'twig');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
@@ -121,14 +136,14 @@ app.use('/api/vote', vote);
 app.use('/api/user', user);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -30,6 +30,26 @@ class AdminsMetier {
     });
   }
 
+  getByEmail(email) {
+    return new Promise((resolve, reject) => {
+      if (!email || email.length === 0) {
+        return reject('Error retrieving your email');
+      }
+
+      this.adminsDao.getByEmail(email)
+        .then((admin) => {
+          if (!admin) {
+            return reject('No account corresponds to this email');
+          }
+
+          return resolve(admin);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
+
   get(email, password) {
     return new Promise((resolve, reject) => {
       if (!email || email.length === 0) {
