@@ -10,9 +10,19 @@ class UserAuthorizeToVoteMetier {
 
   add(email) {
     return new Promise((resolve, reject) => {
-      this.userAuthorizeToVoteDao.add(email)
+      this.get(email)
         .then((userAuthorizeToVote) => {
-          return resolve(userAuthorizeToVote);
+          if (userAuthorizeToVote) {
+            return reject('User already authorize to vote');
+          }
+
+          this.userAuthorizeToVoteDao.add(email)
+            .then((userAuthorizeToVote) => {
+              return resolve(userAuthorizeToVote);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         })
         .catch((error) => {
           return reject(error);
