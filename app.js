@@ -11,6 +11,7 @@ const AdminsMetier = require('./metiers/AdminsMetier');
 const SessionMetier = require('./metiers/SessionMetier');
 const UserMetier = require('./metiers/UserMetier');
 const VotesMetier = require('./metiers/VotesMetier');
+const UserAuthorizeToVoteMetier = require('./metiers/UserAuthorizeToVoteMetier');
 
 const app = express();
 
@@ -40,13 +41,37 @@ const user = require('./routes/api/user');
 
 //Check if we have a default admin account
 const adminMetier = new AdminsMetier();
-/*const userMetier = new UserMetier();
-const votesMetier = new VotesMetier();*/
+const userMetier = new UserMetier();
+const votesMetier = new VotesMetier();
+const userAuthorizeToVoteMetier = new UserAuthorizeToVoteMetier();
 
 //adminMetier.removeAllVote();
 adminMetier.removeAdminAccount("root@root.com");
 adminMetier.setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0987");
 adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");
+
+let emails = ["andrea.nuzzolese@istc.cnr.it", "vpresutti@gmail.com", "alessandro.russo@istc.cnr.it", "martina.sangiovanni@istc.cnr.it"];
+
+function authorizeUserEmail(emails){
+  return new Promise((resolve, reject) => {
+    if(!emails || emails.length === 0){
+      return reject();
+    }
+
+    const email = emails[0];
+    emails.splice(0, 1);
+
+    userAuthorizeToVoteMetier.add(email)
+      .then(() => {
+        return resolve(authorizeUserEmail(emails));
+      })
+      .catch(() => {
+        return resolve(authorizeUserEmail(emails));
+      });
+  });
+}
+
+authorizeUserEmail(emails);
 
 //remove vote medini
 /*userMetier.getByEmail("lionel.medini@univ-lyon1.fr")
