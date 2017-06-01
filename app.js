@@ -50,7 +50,7 @@ adminMetier.removeAdminAccount("root@root.com");
 adminMetier.setDefaultAdminAccount("lionel.medini@liris.cnrs.fr", "lionelmedini0987");
 adminMetier.setDefaultAdminAccount("pierre.mmarsot@gmail.com", "pierremmarsot0987");
 
-let emails = ["andrea.nuzzolese@istc.cnr.it", "vpresutti@gmail.com", "alessandro.russo@istc.cnr.it", "martina.sangiovanni@istc.cnr.it"];
+/*let emails = [];
 
 function authorizeUserEmail(emails){
   return new Promise((resolve, reject) => {
@@ -71,7 +71,7 @@ function authorizeUserEmail(emails){
   });
 }
 
-authorizeUserEmail(emails);
+authorizeUserEmail(emails);*/
 
 //remove vote medini
 /*userMetier.getByEmail("lionel.medini@univ-lyon1.fr")
