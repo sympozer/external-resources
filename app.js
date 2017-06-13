@@ -84,7 +84,7 @@ authorizeUserEmail(emails);*/
   });*/
 
 //Clear database
-adminMetier.removeAllDocuments();
+//adminMetier.removeAllDocuments();
 
 /* Check if upload folder exist */
 try {
