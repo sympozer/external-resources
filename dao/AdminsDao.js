@@ -6,6 +6,7 @@ const PersonRessources = require('../models/PersonRessources');
 const TrackRessources = require('../models/TrackRessources');
 const vote = require('../models/vote');
 const users = require('../models/users');
+const UserAuthorizeToVote = require('../models/UserAuthorizeToVote');
 
 class AdminsDao {
   constructor() {
@@ -18,7 +19,9 @@ class AdminsDao {
         TrackRessources.remove({}, () => {
           vote.remove({}, () => {
             users.remove({}, () => {
-              return resolve();
+              UserAuthorizeToVote.remove({}, () => {
+                return resolve();
+              });
             });
           });
         });
